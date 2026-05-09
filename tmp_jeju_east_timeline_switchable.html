@@ -1,0 +1,3332 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>济州东线 4 天正式计划（可切换方案）</title>
+  <style>
+    :root {
+      --bg-top: #f4fbff;
+      --bg-bottom: #e8f4ef;
+      --ink: #17323f;
+      --muted: #4b6673;
+      --line: #8ec1d6;
+      --card: #ffffff;
+      --accent: #0f8b6d;
+      --accent-2: #1f6ea3;
+      --chip: #edf7fd;
+      --warn: #b36a00;
+      --shadow: 0 12px 28px rgba(20, 51, 66, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Segoe UI', sans-serif;
+      background:
+        radial-gradient(1000px 500px at 10% -10%, #c9ecff 0%, transparent 70%),
+        radial-gradient(900px 500px at 100% 0%, #d6f5dd 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-top), var(--bg-bottom));
+      min-height: 100vh;
+    }
+
+    .wrap {
+      width: min(1100px, 92vw);
+      margin: 24px auto 56px;
+    }
+
+    .hero {
+      background: rgba(255, 255, 255, 0.76);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(130, 180, 205, 0.35);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 22px 20px;
+    }
+
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: clamp(22px, 3vw, 30px);
+      line-height: 1.25;
+      letter-spacing: 0.3px;
+    }
+
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .controls {
+      margin-top: 16px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .control-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      background: #f9fdff;
+      border: 1px solid #d9eaf3;
+      border-radius: 12px;
+      padding: 10px;
+    }
+
+    .control-row strong {
+      font-size: 14px;
+      margin-right: 4px;
+      color: #1b4c65;
+    }
+
+    .control-row label {
+      border: 1px solid #c8dcea;
+      background: #fff;
+      border-radius: 999px;
+      padding: 7px 12px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .control-row input {
+      display: none;
+    }
+
+    .control-row input:checked + span {
+      color: #fff;
+      background: linear-gradient(120deg, var(--accent-2), var(--accent));
+      border-color: transparent;
+      box-shadow: 0 6px 14px rgba(20, 96, 138, 0.28);
+    }
+
+    .control-row label > span {
+      display: inline-block;
+      border-radius: 999px;
+      margin: -7px -12px;
+      padding: 7px 12px;
+      transition: all 0.2s ease;
+    }
+
+    .timeline {
+      margin-top: 20px;
+      position: relative;
+      padding-left: 22px;
+      --timeline-progress-height: 0px;
+      --timeline-progress-marker-top: 0px;
+    }
+
+    .timeline::before,
+    .timeline::after {
+      content: "";
+      position: absolute;
+      left: 8px;
+      top: 0;
+      width: 3px;
+      border-radius: 99px;
+      pointer-events: none;
+    }
+
+    .timeline::before {
+      bottom: 0;
+      background: linear-gradient(180deg, var(--line), #7ab7a1);
+    }
+
+    .timeline::after {
+      height: var(--timeline-progress-height);
+      background: linear-gradient(180deg, var(--accent-2), var(--accent));
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.62), 0 0 14px rgba(15, 139, 109, 0.28);
+      transition: height 0.35s ease;
+    }
+
+    .timeline-progress-marker {
+      position: absolute;
+      left: 9.5px;
+      top: var(--timeline-progress-marker-top);
+      z-index: 2;
+      width: 13px;
+      height: 13px;
+      border: 2px solid #fff;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 4px 12px rgba(15, 85, 75, 0.32);
+      transform: translate(-50%, -50%);
+      transition: top 0.35s ease;
+      pointer-events: none;
+    }
+
+    .day {
+      position: relative;
+      z-index: 1;
+      margin: 22px 0;
+      padding-left: 18px;
+    }
+
+    .day::before {
+      content: "";
+      position: absolute;
+      left: -4px;
+      top: 8px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--accent-2);
+      box-shadow: 0 0 0 4px rgba(60, 131, 170, 0.2);
+    }
+
+    .day h2 {
+      margin: 0 0 8px;
+      font-size: 20px;
+    }
+
+    .day .day-note {
+      color: var(--muted);
+      margin: 0 0 12px;
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .slot {
+      display: grid;
+      grid-template-columns: 92px 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+      align-items: start;
+    }
+
+    .time {
+      font-weight: 700;
+      color: #18597a;
+      font-size: 13px;
+      padding-top: 8px;
+    }
+
+    .time-weather {
+      display: grid;
+      gap: 3px;
+      width: 88px;
+      margin-top: 6px;
+      padding: 6px 7px;
+      border: 1px solid #cfe4ef;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.76);
+      color: #24596e;
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1.25;
+      box-shadow: 0 3px 8px rgba(23, 58, 75, 0.07);
+    }
+
+    .time-weather.is-rain {
+      border-color: #f1cf91;
+      background: #fff8ec;
+      color: #8a5600;
+    }
+
+    .time-weather.is-wind {
+      border-color: #b9d8e7;
+      background: #f2fbff;
+      color: #1b5f85;
+    }
+
+    .time-weather.is-disagree {
+      border-color: #e8bd73;
+      background: #fff9ed;
+      color: #8a5600;
+    }
+
+    .time-weather.is-error {
+      border-color: #e6ccd0;
+      background: #fff7f8;
+      color: #9a4a58;
+    }
+
+    .weather-main,
+    .weather-meta,
+    .weather-source {
+      display: block;
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .weather-source {
+      color: rgba(75, 102, 115, 0.82);
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid #d8e8f2;
+      border-radius: 14px;
+      box-shadow: 0 6px 16px rgba(23, 58, 75, 0.08);
+      padding: 10px 12px;
+    }
+
+    .card h3 {
+      margin: 0 0 6px;
+      font-size: 15px;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 13px;
+    }
+
+    .chips {
+      margin-top: 7px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .chip {
+      background: var(--chip);
+      color: #215e7e;
+      border: 1px solid #c9e2ef;
+      border-radius: 999px;
+      padding: 3px 8px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .chip.warn {
+      background: #fff5e6;
+      border-color: #ffd9a6;
+      color: var(--warn);
+    }
+
+    .detail-list {
+      margin: 8px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .detail-list li {
+      margin: 2px 0;
+    }
+
+    .copy-btn {
+      border: 1px solid #bdd8e8;
+      background: #f3fbff;
+      color: #175d7d;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      margin: 0 4px;
+      vertical-align: baseline;
+    }
+
+    .copy-btn:hover {
+      background: #e3f4ff;
+      border-color: #9bc8de;
+    }
+
+    .ko-copy-chip {
+      display: inline-flex;
+      align-items: center;
+      max-width: min(100%, 320px);
+      margin: 0 4px;
+      border: 1px solid #b9d8e7;
+      border-radius: 999px;
+      background: #f4fbff;
+      color: #175d7d;
+      vertical-align: baseline;
+      white-space: nowrap;
+      overflow: hidden;
+      box-shadow: 0 1px 0 rgba(23, 93, 125, 0.06);
+    }
+
+    .ko-copy-text {
+      min-width: 0;
+      padding: 3px 7px 3px 8px;
+      font-size: 12px;
+      line-height: 1.35;
+      font-weight: 700;
+      font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Segoe UI', sans-serif;
+      background: rgba(255, 255, 255, 0.72);
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .ko-copy-chip .copy-btn {
+      flex: 0 0 auto;
+      margin: 0;
+      border: 0;
+      border-left: 1px solid #b9d8e7;
+      border-radius: 0;
+      padding: 3px 7px;
+      color: #176149;
+      background: rgba(15, 139, 109, 0.08);
+      line-height: 1.35;
+    }
+
+    .ko-copy-chip .copy-btn:hover {
+      background: rgba(15, 139, 109, 0.16);
+      border-color: #b9d8e7;
+    }
+
+    .actual-price-control {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin: 0 4px;
+      padding: 2px 6px;
+      border: 1px solid #bddfcf;
+      border-radius: 999px;
+      background: #f4fff8;
+      color: #176149;
+      font-size: 12px;
+      white-space: nowrap;
+      vertical-align: baseline;
+    }
+
+    .actual-price-control input {
+      width: 64px;
+      border: 1px solid #abd1bf;
+      border-radius: 8px;
+      padding: 2px 5px;
+      color: #17323f;
+      font: inherit;
+      text-align: right;
+      background: #fff;
+    }
+
+    .actual-price-control input:focus {
+      outline: 2px solid rgba(15, 139, 109, 0.18);
+      border-color: var(--accent);
+    }
+
+    .choice-group {
+      margin-top: 10px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .choice-option {
+      display: block;
+      border: 1px solid #d3e5ef;
+      background: #fbfeff;
+      border-radius: 12px;
+      padding: 9px 10px;
+      cursor: pointer;
+      transition: border-color 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+    }
+
+    .choice-option.is-selected {
+      border-color: #79b9a1;
+      background: #f3fff8;
+      box-shadow: 0 6px 14px rgba(15, 139, 109, 0.12);
+    }
+
+    .choice-select {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .choice-select input {
+      accent-color: var(--accent);
+    }
+
+    .choice-title {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .choice-detail {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .choice-actual {
+      display: none;
+      align-items: center;
+      gap: 4px;
+      width: fit-content;
+      margin-top: 6px;
+      padding: 2px 6px;
+      border: 1px solid #bddfcf;
+      border-radius: 999px;
+      background: #fff;
+      color: #176149;
+      font-size: 12px;
+    }
+
+    .choice-option.is-selected .choice-actual {
+      display: inline-flex;
+    }
+
+    .choice-actual input {
+      width: 68px;
+      border: 1px solid #abd1bf;
+      border-radius: 8px;
+      padding: 2px 5px;
+      color: #17323f;
+      font: inherit;
+      text-align: right;
+      background: #fff;
+    }
+
+    .toast {
+      position: fixed;
+      right: 14px;
+      bottom: 72px;
+      background: #14394d;
+      color: #fff;
+      font-size: 12px;
+      padding: 8px 12px;
+      border-radius: 10px;
+      box-shadow: 0 8px 16px rgba(14, 41, 55, 0.28);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(8px);
+      transition: all 0.2s ease;
+      z-index: 999;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .jump-current-btn {
+      position: fixed;
+      right: 14px;
+      bottom: 14px;
+      z-index: 998;
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      border-radius: 999px;
+      background: linear-gradient(120deg, var(--accent-2), var(--accent));
+      color: #fff;
+      box-shadow: 0 9px 20px rgba(15, 91, 75, 0.32);
+      padding: 9px 13px;
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1;
+      cursor: pointer;
+      transition: transform 0.16s ease, box-shadow 0.16s ease;
+    }
+
+    .jump-current-btn:hover {
+      box-shadow: 0 12px 24px rgba(15, 91, 75, 0.38);
+      transform: translateY(-1px);
+    }
+
+    .jump-current-btn:focus-visible {
+      outline: 3px solid rgba(31, 110, 163, 0.24);
+      outline-offset: 3px;
+    }
+
+    .variant {
+      display: none;
+    }
+
+    .variant.active {
+      display: block;
+    }
+
+    .note-wrap {
+      margin-top: 14px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .note-panel {
+      background: rgba(255, 255, 255, 0.84);
+      border: 1px solid #d7e8f2;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .note-panel summary {
+      cursor: pointer;
+      list-style: none;
+      padding: 12px 14px;
+      font-weight: 700;
+      color: #174e69;
+      background: #f5fbff;
+      border-bottom: 1px solid #e0edf5;
+      user-select: none;
+    }
+
+    .note-panel summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .note-panel summary::after {
+      content: '展开';
+      float: right;
+      font-weight: 500;
+      color: #4f7183;
+      font-size: 12px;
+    }
+
+    .note-panel[open] summary::after {
+      content: '收起';
+    }
+
+    .note-body {
+      padding: 12px 14px 14px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .note-body h3 {
+      margin: 8px 0 4px;
+      font-size: 14px;
+      color: #1c526e;
+    }
+
+    .note-body ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .note-body li {
+      margin: 2px 0;
+    }
+
+    .compact-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 6px 14px;
+      margin: 8px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .note-body .compact-list {
+      margin: 8px 0 0;
+      padding-left: 18px;
+    }
+
+    .hero .compact-list {
+      margin-top: 12px;
+    }
+
+    .nested-list {
+      margin: 6px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .note-body .nested-list,
+    .detail-list .nested-list {
+      margin: 6px 0 0;
+      padding-left: 18px;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 10px;
+      margin: 8px 0 12px;
+    }
+
+    .info-card {
+      border: 1px solid #d8e8f2;
+      border-radius: 12px;
+      background: #fbfeff;
+      padding: 9px 10px;
+    }
+
+    .info-card strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #1c526e;
+      font-size: 13px;
+    }
+
+    .info-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .table-scroll {
+      margin: 8px 0 12px;
+      overflow-x: auto;
+      border: 1px solid #d8e8f2;
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    .info-table {
+      width: 100%;
+      min-width: 560px;
+      border-collapse: collapse;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .info-table th,
+    .info-table td {
+      padding: 8px 9px;
+      border-bottom: 1px solid #e3edf4;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .info-table th {
+      color: #1c526e;
+      background: #f5fbff;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .info-table tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .info-table .num {
+      white-space: nowrap;
+      color: #176149;
+      font-weight: 700;
+    }
+
+    .info-table .ko-copy-chip {
+      max-width: 100%;
+      margin-top: 2px;
+      margin-bottom: 2px;
+    }
+
+    .route-table {
+      min-width: 760px;
+      table-layout: fixed;
+    }
+
+    .route-table .route-col-segment {
+      width: 48%;
+    }
+
+    .route-table .route-col-result {
+      width: 18%;
+    }
+
+    .route-table .route-col-money {
+      width: 17%;
+    }
+
+    .route-cell {
+      color: var(--ink);
+    }
+
+    .route-pair {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 24px minmax(0, 1fr);
+      gap: 7px;
+      align-items: start;
+    }
+
+    .route-place {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      min-width: 0;
+      line-height: 1.55;
+    }
+
+    .route-arrow {
+      color: #5b7480;
+      font-weight: 800;
+      line-height: 1.55;
+      text-align: center;
+    }
+
+    .step-table td:first-child {
+      width: 108px;
+      white-space: nowrap;
+      color: #18597a;
+      font-weight: 700;
+    }
+
+    .stay-table {
+      table-layout: fixed;
+    }
+
+    .stay-table .stay-col-night {
+      width: 86px;
+    }
+
+    .stay-table .stay-col-hotel {
+      width: 30%;
+    }
+
+    .stay-table .stay-col-area {
+      width: 24%;
+    }
+
+    .stay-table .stay-night {
+      width: 86px;
+      white-space: nowrap;
+      color: #18597a;
+      font-weight: 700;
+    }
+
+    .stay-table .stay-hotel {
+      width: 30%;
+    }
+
+    .stay-table .stay-area {
+      width: 24%;
+    }
+
+    .foot {
+      margin-top: 18px;
+      background: rgba(255, 255, 255, 0.84);
+      border: 1px solid #d7e8f2;
+      border-radius: 14px;
+      padding: 12px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .budget-line {
+      margin: 3px 0;
+    }
+
+    .budget-range {
+      color: #176149;
+      font-weight: 800;
+    }
+
+    .budget-note {
+      color: #5b7480;
+      font-size: 12px;
+    }
+
+    .session-cost-line {
+      margin-top: 9px;
+      padding-top: 7px;
+      border-top: 1px dashed #d5e6f0;
+      color: #2a5d44;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    @media (max-width: 760px) {
+      .wrap {
+        width: min(100% - 24px, 1100px);
+        margin-top: 12px;
+      }
+      .hero,
+      .card,
+      .note-panel {
+        border-radius: 12px;
+      }
+      .hero {
+        padding: 16px 14px;
+      }
+      .slot {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+      .time {
+        padding-top: 0;
+        font-size: 12px;
+      }
+      .time-weather {
+        width: min(100%, 260px);
+        grid-template-columns: repeat(3, max-content);
+        gap: 5px 8px;
+        align-items: center;
+      }
+      .weather-source {
+        grid-column: 1 / -1;
+      }
+      .timeline {
+        padding-left: 14px;
+      }
+      .day {
+        padding-left: 14px;
+      }
+      .compact-list,
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+      .note-body {
+        padding: 10px 11px 12px;
+      }
+      .info-table {
+        min-width: 500px;
+      }
+      .route-table {
+        min-width: 680px;
+      }
+      .route-pair {
+        grid-template-columns: minmax(0, 1fr) 20px minmax(0, 1fr);
+        gap: 5px;
+      }
+      .stay-table {
+        min-width: 0;
+      }
+      .stay-table thead {
+        display: none;
+      }
+      .stay-table,
+      .stay-table tbody,
+      .stay-table tr,
+      .stay-table td {
+        display: block;
+        width: 100%;
+      }
+      .stay-table tr {
+        padding: 8px 0;
+        border-bottom: 1px solid #e3edf4;
+      }
+      .stay-table tr:last-child {
+        border-bottom: 0;
+      }
+      .stay-table td {
+        display: grid;
+        grid-template-columns: 76px minmax(0, 1fr);
+        gap: 8px;
+        border-bottom: 0;
+        padding: 5px 9px;
+      }
+      .stay-table td::before {
+        content: attr(data-label);
+        color: #1c526e;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      .stay-table .stay-night,
+      .stay-table .stay-hotel,
+      .stay-table .stay-area {
+        width: 100%;
+        white-space: normal;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <h1>济州东线 4 天正式计划（从上到下，可原地切换）</h1>
+      <p>
+        路线、餐饮候选、住宿注意和 taxi 预算已按正式版 plan 的 Chrome 和 Naver Map driving 核验口径放进页面。
+      </p>
+      <ul class="compact-list">
+        <li>不自驾、不爬山。</li>
+        <li>Night 1–2：咸德格洛斯特。</li>
+        <li>Night 3：Ventimo。</li>
+        <li>Day 4：固定 14:00 航班。</li>
+        <li>切换项在对应时间段原地切换。</li>
+        <li>底部预算按餐饮选择和实际金额更新。</li>
+      </ul>
+    </section>
+
+    <section class="note-wrap">
+      <details class="note-panel">
+        <summary>出发前备注：打车事项（App、付款、准备、坑点、当地要求）</summary>
+        <div class="note-body">
+          <h3>1) 用什么 App</h3>
+          <ul>
+            <li>Uber（韩国叫车常显示 UT）：外籍手机号配合国际卡，成功率通常更高。</li>
+            <li>Kakao T（카카오 T，韩国打车 App）<button class="copy-btn" data-copy="카카오 T">复制韩文</button>：部分账号场景会卡在本地验证。</li>
+            <li>地图配合：Naver Map（네이버 지도，Naver 地图）<button class="copy-btn" data-copy="네이버 지도">复制韩文</button>先确认打车路线、上车点和目的地；Google Maps 只做地名辅助，不用来估韩国 driving 时间。</li>
+          </ul>
+
+          <h3>2) 怎么付款</h3>
+          <ul>
+            <li>App 内绑卡自动扣款可以避免沟通现金和找零。</li>
+            <li>线下可刷卡为主，现金仅做兜底，准备约 265–530 元等值小面额韩元即可。</li>
+            <li>深夜、雨天、热门景点离场，可能出现加价或等待费，先在 App 看预估价。</li>
+          </ul>
+
+          <h3>3) 需要提前准备什么</h3>
+          <ul>
+            <li>提前装好 2 个叫车 App 并完成登录、绑卡、手机号验证。</li>
+            <li>把酒店、机场、核心景点的韩文名和韩文地址保存到收藏，现场一键复制。</li>
+            <li>移动网络要稳定：eSIM 或实体卡到达后先测速，避免出机场无法叫车。</li>
+            <li>准备一个韩文备注模板："여기로 가 주세요"（请带我到这里）<button class="copy-btn" data-copy="여기로 가 주세요">复制韩文</button>和"여기서 내려 주세요"（请在这里停车）<button class="copy-btn" data-copy="여기서 내려 주세요">复制韩文</button>。</li>
+          </ul>
+
+          <h3>4) 常见坑</h3>
+          <ul>
+            <li>景点英文名可能映射错点位，尽量用韩文地名和地图坐标核对。</li>
+            <li>同名海边或咖啡店在济州可能不止一个，点上车前核对行政区（읍/면/시，邑 / 面 / 市）<button class="copy-btn" data-copy="읍/면/시">复制韩文</button>。</li>
+            <li>上下车点在单行线或禁停区时，司机会让你走到可停靠点，不是拒载。</li>
+            <li>高峰时段空车少，建议提前 10–15 分钟叫车，不要卡点出发。</li>
+          </ul>
+
+          <h3>5) 当地特殊要求与沟通建议</h3>
+          <ul>
+            <li>后排系安全带是常规要求，短途也建议全程系好。</li>
+            <li>车内不建议吃味道重的食物，湿伞上车先甩干，避免座椅弄湿。</li>
+            <li>遇到司机不懂英文，直接给韩文地址最有效；必要时用翻译 App 打字沟通。</li>
+            <li>夜间偏远点位返程车少，回主干道或商圈后再二次打车更稳。</li>
+          </ul>
+
+        </div>
+      </details>
+
+      <details class="note-panel">
+        <summary>住宿和订房执行</summary>
+        <div class="note-body">
+          <h3>住宿结构</h3>
+          <div class="table-scroll">
+            <table class="info-table stay-table">
+              <colgroup>
+                <col class="stay-col-night" />
+                <col class="stay-col-hotel" />
+                <col class="stay-col-area" />
+                <col />
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>晚数</th>
+                  <th>酒店</th>
+                  <th>生活圈</th>
+                  <th>执行重点</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="stay-night" data-label="晚数">Night 1–2</td>
+                  <td class="stay-hotel" data-label="酒店">글로스터호텔 함덕（咸德格洛斯特酒店）<button class="copy-btn" data-copy="글로스터호텔 함덕">复制韩文</button></td>
+                  <td class="stay-area" data-label="生活圈">함덕해수욕장（咸德海水浴场）<button class="copy-btn" data-copy="함덕해수욕장">复制韩文</button></td>
+                  <td data-label="执行重点">Day 1 落北岸；Day 2 去月汀里顺路；Day 3 退房日确认行李寄存和叫车上车点。</td>
+                </tr>
+                <tr>
+                  <td class="stay-night" data-label="晚数">Night 3</td>
+                  <td class="stay-hotel" data-label="酒店">벤티모 호텔 앤 레지던스 제주（济州文蒂莫酒店及公寓）<button class="copy-btn" data-copy="벤티모 호텔 앤 레지던스 제주">复制韩文</button></td>
+                  <td class="stay-area" data-label="生活圈">제주공항（济州机场）<button class="copy-btn" data-copy="제주공항">复制韩文</button>附近</td>
+                  <td data-label="执行重点">Day 4 14:00 航班最稳；早上只做酒店附近早餐、补给和短车去机场。</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>咸德格洛斯特订房口径</h3>
+          <ul class="compact-list">
+            <li>日期：2026-06-01 入住，2026-06-03 退房。</li>
+            <li>人数：2 成人，1 间，2 晚。</li>
+            <li>订前以最终支付页为准。</li>
+          </ul>
+          <div class="table-scroll">
+            <table class="info-table">
+              <thead>
+                <tr>
+                  <th>房型</th>
+                  <th>无早</th>
+                  <th>1 份早餐套餐</th>
+                  <th>建议</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>标准双床房</td>
+                  <td class="num">约 300 元/晚</td>
+                  <td class="num">约 327 元/晚</td>
+                  <td>默认首查；不确定是否吃酒店早餐时选无早。</td>
+                </tr>
+                <tr>
+                  <td>城景豪华双床房</td>
+                  <td class="num">约 357 元/晚</td>
+                  <td class="num">约 384 元/晚</td>
+                  <td>价差可接受时升级空间感。</td>
+                </tr>
+                <tr>
+                  <td>海景豪华双床房</td>
+                  <td class="num">约 472 元/晚</td>
+                  <td class="num">约 498 元/晚</td>
+                  <td>想要海景再选；不属于预算取向。</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="info-grid">
+            <div class="info-card">
+              <strong>早餐策略</strong>
+              <p>可见套餐多为 1 份早餐。2 人都吃时，比较“1 份早餐套餐 + 另 1 份现场单买”和“无早 + 2 份现场单买”。</p>
+            </div>
+            <div class="info-card">
+              <strong>服务注意</strong>
+              <p>页面可见 24 小时前台和行李寄存，未见明确中文前台字段；下单页保留取消政策、退款规则、房型和早餐份数截图。</p>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details class="note-panel">
+        <summary>交通核验和预算汇总</summary>
+        <div class="note-body">
+          <h3>Naver driving 核验段</h3>
+          <div class="table-scroll">
+            <table class="info-table route-table">
+              <colgroup>
+                <col class="route-col-segment" />
+                <col class="route-col-result" />
+                <col class="route-col-money" />
+                <col class="route-col-money" />
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>路段</th>
+                  <th>Naver 结果</th>
+                  <th>折算</th>
+                  <th>执行预算</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="route-cell"><div class="route-pair"><span class="route-place">제주국제공항（济州国际机场）<button class="copy-btn" data-copy="제주국제공항">复制韩文</button></span><span class="route-arrow">→</span><span class="route-place">글로스터호텔 함덕（咸德格洛斯特酒店）<button class="copy-btn" data-copy="글로스터호텔 함덕">复制韩文</button></span></div></td>
+                  <td>约 37 分钟 / 20 km</td>
+                  <td class="num">约 102 元</td>
+                  <td class="num">105–150 元</td>
+                </tr>
+                <tr>
+                  <td class="route-cell"><div class="route-pair"><span class="route-place">글로스터호텔 함덕（咸德格洛斯特酒店）<button class="copy-btn" data-copy="글로스터호텔 함덕">复制韩文</button></span><span class="route-arrow">→</span><span class="route-place">월정리해수욕장（月汀里海水浴场）<button class="copy-btn" data-copy="월정리해수욕장">复制韩文</button></span></div></td>
+                  <td>约 23 分钟 / 13 km</td>
+                  <td class="num">约 73 元</td>
+                  <td class="num">75–95 元</td>
+                </tr>
+                <tr>
+                  <td class="route-cell"><div class="route-pair"><span class="route-place">머문 베이커리카페（머문 贝果咖啡）<button class="copy-btn" data-copy="머문 베이커리카페">复制韩文</button></span><span class="route-arrow">→</span><span class="route-place">세화해수욕장（细花海水浴场）<button class="copy-btn" data-copy="세화해수욕장">复制韩文</button></span></div></td>
+                  <td>约 15 分钟 / 8.1 km</td>
+                  <td class="num">约 48 元</td>
+                  <td class="num">50–70 元</td>
+                </tr>
+                <tr>
+                  <td class="route-cell"><div class="route-pair"><span class="route-place">세화해수욕장（细花海水浴场）<button class="copy-btn" data-copy="세화해수욕장">复制韩文</button></span><span class="route-arrow">→</span><span class="route-place">글로스터호텔 함덕（咸德格洛斯特酒店）<button class="copy-btn" data-copy="글로스터호텔 함덕">复制韩文</button></span></div></td>
+                  <td>约 28 分钟 / 20 km</td>
+                  <td class="num">约 100 元</td>
+                  <td class="num">100–125 元</td>
+                </tr>
+                <tr>
+                  <td class="route-cell"><div class="route-pair"><span class="route-place">글로스터호텔 함덕（咸德格洛斯特酒店）<button class="copy-btn" data-copy="글로스터호텔 함덕">复制韩文</button></span><span class="route-arrow">→</span><span class="route-place">성산일출봉（城山日出峰）<button class="copy-btn" data-copy="성산일출봉">复制韩文</button></span></div></td>
+                  <td>约 46 分钟 / 32 km</td>
+                  <td class="num">约 152 元</td>
+                  <td class="num">155–190 元</td>
+                </tr>
+                <tr>
+                  <td class="route-cell"><div class="route-pair"><span class="route-place">성산일출봉（城山日出峰）<button class="copy-btn" data-copy="성산일출봉">复制韩文</button></span><span class="route-arrow">→</span><span class="route-place">섭지코지（涉地可支）<button class="copy-btn" data-copy="섭지코지">复制韩文</button></span></div></td>
+                  <td>约 12 分钟 / 6.3 km</td>
+                  <td class="num">约 41 元</td>
+                  <td class="num">45–60 元</td>
+                </tr>
+                <tr>
+                  <td class="route-cell"><div class="route-pair"><span class="route-place">성산포항종합여객터미널（城山港综合客运站）<button class="copy-btn" data-copy="성산포항종합여객터미널">复制韩文</button></span><span class="route-arrow">→</span><span class="route-place">벤티모 호텔 앤 레지던스 제주（济州文蒂莫酒店及公寓）<button class="copy-btn" data-copy="벤티모 호텔 앤 레지던스 제주">复制韩文</button></span></div></td>
+                  <td>约 1 小时 8 分钟 / 48 km</td>
+                  <td class="num">约 224 元</td>
+                  <td class="num">225–270 元</td>
+                </tr>
+                <tr>
+                  <td class="route-cell"><div class="route-pair"><span class="route-place">벤티모 호텔 앤 레지던스 제주（济州文蒂莫酒店及公寓）<button class="copy-btn" data-copy="벤티모 호텔 앤 레지던스 제주">复制韩文</button></span><span class="route-arrow">→</span><span class="route-place">제주국제공항（济州国际机场）<button class="copy-btn" data-copy="제주국제공항">复制韩文</button></span></div></td>
+                  <td>约 5 分钟 / 1.9 km</td>
+                  <td class="num">约 23 元</td>
+                  <td class="num">23–40 元</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>每日预算口径</h3>
+          <div class="table-scroll">
+            <table class="info-table">
+              <thead>
+                <tr>
+                  <th>天数</th>
+                  <th>交通</th>
+                  <th>不含酒店小计</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Day 1</td><td class="num">105–185 元</td><td class="num">325–705 元</td></tr>
+                <tr><td>Day 2 晴天</td><td class="num">225–290 元</td><td class="num">525–1,050 元</td></tr>
+                <tr><td>Day 2 雨天</td><td class="num">150–220 元</td><td class="num">450–980 元</td></tr>
+                <tr><td>Day 3A 牛岛</td><td class="num">470–840 元</td><td class="num">800–1,880 元</td></tr>
+                <tr><td>Day 3B 市区</td><td class="num">445–570 元</td><td class="num">780–1,570 元</td></tr>
+                <tr><td>Day 3C 雨天</td><td class="num">320–520 元</td><td class="num">600–1,600 元</td></tr>
+                <tr><td>Day 4</td><td class="num">23–40 元</td><td class="num">103–340 元</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <ul class="compact-list">
+            <li>全程晴天主线：1,733–3,975 元。</li>
+            <li>全程雨天或替代口径：1,458–3,515 元。</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="note-panel">
+        <summary>下单和出发前检查清单</summary>
+        <div class="note-body">
+          <h3>酒店</h3>
+          <ul>
+            <li>咸德格洛斯特：确认双床房型、是否含早餐、早餐份数是 1 份还是 2 份、取消政策和到店时间。</li>
+            <li>Ventimo：确认 Night 3 日期、退房时间、前台 / 行李寄存、Day 4 叫车上车点。</li>
+            <li>两家酒店地址都保存韩文和地图坐标。</li>
+          </ul>
+
+          <h3>交通</h3>
+          <ul>
+            <li>Uber / Kakao T 至少一个可正常登录、绑卡、定位。</li>
+          </ul>
+          <h3>Naver Map 收藏</h3>
+          <ul class="compact-list">
+            <li>제주국제공항（济州国际机场）<button class="copy-btn" data-copy="제주국제공항">复制韩文</button></li>
+            <li>글로스터호텔 함덕（咸德格洛斯特酒店）<button class="copy-btn" data-copy="글로스터호텔 함덕">复制韩文</button></li>
+            <li>월정리해수욕장（月汀里海水浴场）<button class="copy-btn" data-copy="월정리해수욕장">复制韩文</button></li>
+            <li>머문 베이커리카페（머문 贝果咖啡）<button class="copy-btn" data-copy="머문 베이커리카페">复制韩文</button></li>
+            <li>성산일출봉（城山日出峰）<button class="copy-btn" data-copy="성산일출봉">复制韩文</button></li>
+            <li>섭지코지（涉地可支）<button class="copy-btn" data-copy="섭지코지">复制韩文</button></li>
+            <li>성산포항종합여객터미널（城山港综合客运站）<button class="copy-btn" data-copy="성산포항종합여객터미널">复制韩文</button></li>
+            <li>제주관광공사 성산면세점（济州观光公社城山免税店）<button class="copy-btn" data-copy="제주관광공사 성산면세점">复制韩文</button></li>
+            <li>벤티모 호텔 앤 레지던스 제주（济州文蒂莫酒店及公寓）<button class="copy-btn" data-copy="벤티모 호텔 앤 레지던스 제주">复制韩文</button></li>
+          </ul>
+          <h3>Day 3 出发前</h3>
+          <ul class="compact-list">
+            <li>重查风力和雨量。</li>
+            <li>重查 우도（牛岛）<button class="copy-btn" data-copy="우도">复制韩文</button>船班。</li>
+            <li>买免税品时确认 제주관광공사 성산면세점（济州观光公社城山免税店）<button class="copy-btn" data-copy="제주관광공사 성산면세점">复制韩文</button>营业。</li>
+            <li>同步确认 인도장（免税品提货处）<button class="copy-btn" data-copy="인도장">复制韩文</button>和提货要求。</li>
+            <li>任一项不稳，直接执行下列替代方案：
+              <ul class="nested-list">
+                <li>方案 B。</li>
+                <li>方案 C。</li>
+              </ul>
+            </li>
+          </ul>
+
+          <h3>装备</h3>
+          <ul>
+            <li>薄外套、防水外套、舒适鞋、折叠伞或轻雨衣。</li>
+            <li>韩国插座按欧标两圆孔准备转接头；手机和电脑充电器确认 100-240V。</li>
+            <li>海边风大，帽子和轻便防晒比厚重装备更实用。</li>
+          </ul>
+        </div>
+      </details>
+    </section>
+
+    <section class="timeline">
+      <article class="day">
+        <h2>Day 1</h2>
+        <p class="day-note">14:00 抵达后先落北岸，不赶景点，先把跨区移动做完。</p>
+
+        <div class="slot">
+          <div class="time">14:00–14:50</div>
+          <div class="card">
+            <h3>抵达后取行李</h3>
+            <p>整理网络和叫车应用，不在机场停留太久。</p>
+          </div>
+        </div>
+
+        <div class="slot">
+          <div class="time">14:50–15:40</div>
+          <div class="card">
+            <h3>机场附近迟午餐</h3>
+            <p>先选实际要吃的推荐食物，底部预算才计入这顿午餐；吃完再长车去咸德，不把午餐拉去东线深处。</p>
+            <div class="choice-group" data-budget-choice-group="day1_lunch" data-choice-label="机场迟午餐" data-estimate-min="90" data-estimate-max="260">
+              <label class="choice-option">
+                <span class="choice-select">
+                  <input type="radio" name="choice_day1_lunch" value="meokdol_noodle" data-budget-min="116" data-budget-max="116" />
+                  <span class="choice-title">먹돌고기국수 제주본점（墨石肉汤面济州本店）<button class="copy-btn" data-copy="먹돌고기국수 제주본점">复制韩文</button></span>
+                </span>
+                <span class="choice-detail">推荐食物：猪肉汤面（고기국수）<button class="copy-btn" data-copy="고기국수">复制</button>，2 份，<span class="choice-price">2 人约 116 元</span>；机场近，适合落地后快速吃。</span>
+                <span class="choice-actual">实际 <input type="text" inputmode="decimal" autocomplete="off" placeholder="填写" data-choice-actual="1" aria-label="机场迟午餐实际金额：墨石肉汤面" /> 元</span>
+              </label>
+
+              <label class="choice-option">
+                <span class="choice-select">
+                  <input type="radio" name="choice_day1_lunch" value="kimmanbok_gimbap" data-budget-min="70" data-budget-max="120" />
+                  <span class="choice-title">제주김만복김밥 본점（济州金万福紫菜包饭本店）<button class="copy-btn" data-copy="제주김만복김밥 본점">复制韩文</button></span>
+                </span>
+                <span class="choice-detail">推荐食物：김밥（紫菜包饭）<button class="copy-btn" data-copy="김밥">复制韩文</button>，<span class="choice-price">2 人约 70–120 元</span>；轻食、打包、赶时间时选。</span>
+                <span class="choice-actual">实际 <input type="text" inputmode="decimal" autocomplete="off" placeholder="填写" data-choice-actual="1" aria-label="机场迟午餐实际金额：济州金万福紫菜包饭" /> 元</span>
+              </label>
+
+              <label class="choice-option">
+                <span class="choice-select">
+                  <input type="radio" name="choice_day1_lunch" value="dajeongi_gimbap" data-budget-min="70" data-budget-max="120" />
+                  <span class="choice-title">다정이네김밥 제주공항점（多情家紫菜包饭济州机场店）<button class="copy-btn" data-copy="다정이네김밥 제주공항점">复制韩文</button></span>
+                </span>
+                <span class="choice-detail">推荐食物：김밥（紫菜包饭）<button class="copy-btn" data-copy="김밥">复制韩文</button>，<span class="choice-price">2 人约 70–120 元</span>；菜单简单，作为稳妥选择。</span>
+                <span class="choice-actual">实际 <input type="text" inputmode="decimal" autocomplete="off" placeholder="填写" data-choice-actual="1" aria-label="机场迟午餐实际金额：多情家紫菜包饭" /> 元</span>
+              </label>
+
+              <label class="choice-option">
+                <span class="choice-select">
+                  <input type="radio" name="choice_day1_lunch" value="woojin_soup" data-budget-min="116" data-budget-max="116" />
+                  <span class="choice-title">우진해장국（佑珍醒酒汤）<button class="copy-btn" data-copy="우진해장국">复制韩文</button></span>
+                </span>
+                <span class="choice-detail">推荐食物：蕨菜肉汤（고사리육개장）<button class="copy-btn" data-copy="고사리육개장">复制</button>，2 份，<span class="choice-price">2 人约 116 元</span>；只在不排大队时选。</span>
+                <span class="choice-actual">实际 <input type="text" inputmode="decimal" autocomplete="off" placeholder="填写" data-choice-actual="1" aria-label="机场迟午餐实际金额：佑珍醒酒汤" /> 元</span>
+              </label>
+
+              <label class="choice-option">
+                <span class="choice-select">
+                  <input type="radio" name="choice_day1_lunch" value="dodu_haenyeo" data-budget-min="130" data-budget-max="220" />
+                  <span class="choice-title">도두해녀의집（道头海女之家）<button class="copy-btn" data-copy="도두해녀의집">复制韩文</button></span>
+                </span>
+                <span class="choice-detail">推荐食物：鲍鱼粥（전복죽）<button class="copy-btn" data-copy="전복죽">复制</button>或鲍鱼水会（전복물회）<button class="copy-btn" data-copy="전복물회">复制</button>，<span class="choice-price">2 人约 130–220 元</span>；航班提前且天气好时适合，10:00 后才稳。</span>
+                <span class="choice-actual">实际 <input type="text" inputmode="decimal" autocomplete="off" placeholder="填写" data-choice-actual="1" aria-label="机场迟午餐实际金额：道头海女之家" /> 元</span>
+              </label>
+            </div>
+            <ul class="detail-list">
+              <li>机场短接驳：제주국제공항（济州国际机场）<button class="copy-btn" data-copy="제주국제공항">复制韩文</button>周边 0–35 元。</li>
+            </ul>
+            <div class="chips">
+              <span class="chip">轻负担</span>
+              <span class="chip">不跨区</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="slot">
+          <div class="time">15:40–16:30</div>
+          <div class="card">
+            <h3>去咸德格洛斯特酒店</h3>
+            <p>高温段放在车里，减少体力消耗。</p>
+            <ul class="detail-list">
+              <li>线路：제주국제공항（济州国际机场）<button class="copy-btn" data-copy="제주국제공항">复制韩文</button>→ 글로스터호텔 함덕（咸德格洛斯特酒店）<button class="copy-btn" data-copy="글로스터호텔 함덕">复制韩文</button>。</li>
+              <li>Naver 核验：约 37 分钟 / 20 km。</li>
+              <li>执行预算：约 105–150 元 / 车。</li>
+            </ul>
+            <div class="chips">
+              <span class="chip">交通约 105–150 元</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="slot">
+          <div class="time">16:30–20:00</div>
+          <div class="card">
+            <div class="control-row">
+              <strong>Day 1 天气：</strong>
+              <label>
+                <input type="radio" name="day1_weather" value="sunny" checked />
+                <span>晴天</span>
+              </label>
+              <label>
+                <input type="radio" name="day1_weather" value="rain" />
+                <span>下雨</span>
+              </label>
+            </div>
+
+            <div data-meal-choice-group="day1_dinner"></div>
+
+            <div class="variant active" data-group="day1_weather" data-value="sunny">
+              <h3>先走咸德海边，再回酒店附近晚餐</h3>
+              <p>不下水、不赶点，当晚不跨区，早点休息。</p>
+              <ul class="detail-list">
+                <li>路线：호텔（酒店）<button class="copy-btn" data-copy="호텔">复制韩文</button>→ 함덕해변（咸德海边）<button class="copy-btn" data-copy="함덕해변">复制韩文</button>→ 호텔 인근 식당（酒店附近餐厅）<button class="copy-btn" data-copy="호텔 인근 식당">复制韩文</button>。</li>
+                <li>价格：晚餐 2 人约 140–380 元。</li>
+                <li>顺路伴手礼：
+                  <ul class="nested-list">
+                    <li>선물고팡 함덕점（礼物仓咸德店）<button class="copy-btn" data-copy="선물고팡 함덕점">复制韩文</button>：橘子巧克力、钥匙扣、杯子和同事小礼。</li>
+                    <li>윗니스제주（Witness Jeju 香水店）<button class="copy-btn" data-copy="윗니스제주">复制韩文</button>：适合喜欢香水的人；小红书口径小瓶 100 元+、大瓶 200 元+。</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+
+            <div class="variant" data-group="day1_weather" data-value="rain">
+              <h3>酒店附近咖啡和补给后早休</h3>
+              <p>雨天不走海边，把 Day 1 改成室内轻活动，减少淋雨和体力消耗。</p>
+              <ul class="detail-list">
+                <li>路线：호텔（酒店）<button class="copy-btn" data-copy="호텔">复制韩文</button>→ 카페（咖啡）<button class="copy-btn" data-copy="카페">复制韩文</button>→ 편의점（便利店）<button class="copy-btn" data-copy="편의점">复制韩文</button>→ 酒店休息。</li>
+                <li>价格：2 人约 100–260 元。</li>
+                <li>雨小时可只加一个短停：선물고팡 함덕점（礼物仓咸德店）<button class="copy-btn" data-copy="선물고팡 함덕점">复制韩文</button>；雨大就不为伴手礼出门。</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="day">
+        <h2>Day 2</h2>
+        <p class="day-note">东线主视觉日：先拍海边，再用 moumoon 做午后休息点。</p>
+
+        <div class="slot">
+          <div class="time">08:30–09:30</div>
+          <div class="card">
+            <div class="control-row">
+              <strong>咸德早餐后：</strong>
+              <label>
+                <input type="radio" name="day2_morning_weather" value="sunny" checked />
+                <span>晴天</span>
+              </label>
+              <label>
+                <input type="radio" name="day2_morning_weather" value="rain" />
+                <span>下雨</span>
+              </label>
+            </div>
+
+            <div data-meal-choice-group="day2_breakfast"></div>
+
+            <div class="variant active" data-group="day2_morning" data-value="sunny">
+              <h3>咸德早餐后海边短走</h3>
+              <p>轻松开场，避免一早拉满节奏。</p>
+            </div>
+
+            <div class="variant" data-group="day2_morning" data-value="rain">
+              <h3>咸德早餐后留在酒店附近避雨</h3>
+              <p>取消海边短走，早餐后在 글로스터호텔 함덕（咸德格洛斯特酒店）<button class="copy-btn" data-copy="글로스터호텔 함덕">复制韩文</button>附近补给，等 09:30 直接叫车去月汀里。</p>
+              <ul class="detail-list">
+                <li>咖啡店补给。</li>
+                <li>便利店补给。</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="slot">
+          <div class="time">09:30–12:00</div>
+          <div class="card">
+            <div class="control-row">
+              <strong>月汀里上午：</strong>
+              <label>
+                <input type="radio" name="day2_woljeong_weather" value="sunny" checked />
+                <span>晴天</span>
+              </label>
+              <label>
+                <input type="radio" name="day2_woljeong_weather" value="rain" />
+                <span>下雨</span>
+              </label>
+            </div>
+
+            <div class="variant active" data-group="day2_woljeong" data-value="sunny">
+              <h3>到月汀里后海边拍照</h3>
+              <p>彩色椅子和海边步道为主，不赶小景点数量。</p>
+              <ul class="detail-list">
+                <li>线路：글로스터호텔 함덕（咸德格洛斯特酒店）<button class="copy-btn" data-copy="글로스터호텔 함덕">复制韩文</button>→ 월정리해수욕장（月汀里海水浴场）<button class="copy-btn" data-copy="월정리해수욕장">复制韩文</button>。</li>
+                <li>Naver 核验：约 23 分钟 / 13 km。</li>
+                <li>执行预算：约 75–95 元 / 车。</li>
+              </ul>
+            </div>
+
+            <div class="variant" data-group="day2_woljeong" data-value="rain">
+              <h3>到月汀里后短停看海，再进室内</h3>
+              <p>不在海边步道久走，最多下车确认风雨和拍 5–10 分钟，随后进入 월정리해수욕장（月汀里海水浴场）<button class="copy-btn" data-copy="월정리해수욕장">复制韩文</button>附近点位等雨。</p>
+              <ul class="detail-list">
+                <li>咖啡店等雨。</li>
+                <li>餐厅等雨。</li>
+              </ul>
+              <ul class="detail-list">
+                <li>线路：글로스터호텔 함덕（咸德格洛斯特酒店）<button class="copy-btn" data-copy="글로스터호텔 함덕">复制韩文</button>→ 월정리해수욕장（月汀里海水浴场）<button class="copy-btn" data-copy="월정리해수욕장">复制韩文</button>。</li>
+                <li>Naver 核验：约 23 分钟 / 13 km。</li>
+                <li>执行预算：约 75–95 元 / 车。</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="slot">
+          <div class="time">12:00–14:40</div>
+          <div class="card">
+            <div class="control-row">
+              <strong>午餐到 moumoon：</strong>
+              <label>
+                <input type="radio" name="day2_lunch_weather" value="sunny" checked />
+                <span>晴天</span>
+              </label>
+              <label>
+                <input type="radio" name="day2_lunch_weather" value="rain" />
+                <span>下雨</span>
+              </label>
+            </div>
+
+            <div data-meal-choice-group="day2_lunch"></div>
+
+            <div class="variant active" data-group="day2_lunch" data-value="sunny">
+              <h3>月汀里午餐后去 moumoon</h3>
+              <p>moumoon 在 Day 2 主线，不后移不删。</p>
+              <ul class="detail-list">
+                <li>午餐：2 人约 140–360 元。</li>
+                <li>moumoon 下午茶：머문 베이커리카페（머문 贝果咖啡）<button class="copy-btn" data-copy="머문 베이커리카페">复制韩文</button>，2 人约 90–180 元。</li>
+                <li>建议时长：60–90 分钟，避开最拥挤窗口。</li>
+                <li>地址：제주 제주시 구좌읍 해맞이해안로 460 2층<button class="copy-btn" data-copy="제주 제주시 구좌읍 해맞이해안로 460 2층">复制地址</button>。</li>
+                <li>顺路小店按位置选择：
+                  <ul class="nested-list">
+                    <li>헬로제주 월정리（Hello Jeju 月汀里店）<button class="copy-btn" data-copy="헬로제주 월정리">复制韩文</button>：同地址 1 楼，最顺手。</li>
+                    <li>몽그레 월정리점（Mongle 月汀里店）<button class="copy-btn" data-copy="몽그레 월정리점">复制韩文</button>：适合买云朵饼干，一盒约 60 元。</li>
+                    <li>달믄곳（月汀里小店）<button class="copy-btn" data-copy="달믄곳">复制韩文</button>：营业窗口短，只在路过且开门时顺手。</li>
+                  </ul>
+                </li>
+              </ul>
+              <div class="chips">
+                <span class="chip">moumoon 固定点</span>
+                <span class="chip">月汀里主海边带</span>
+              </div>
+            </div>
+
+            <div class="variant" data-group="day2_lunch" data-value="rain">
+              <h3>月汀里室内午餐后直接长停 moumoon</h3>
+              <p>午餐和下午茶都放进室内，减少海边暴露；moumoon 作为避雨主休息点。</p>
+              <ul class="detail-list">
+                <li>午餐：2 人约 140–360 元。</li>
+                <li>moumoon 下午茶：머문 베이커리카페（머문 贝果咖啡）<button class="copy-btn" data-copy="머문 베이커리카페">复制韩文</button>，2 人约 90–180 元。</li>
+                <li>建议时长：90–120 分钟，用这段时间等雨势变化。</li>
+                <li>地址：제주 제주시 구좌읍 해맞이해안로 460 2층<button class="copy-btn" data-copy="제주 제주시 구좌읍 해맞이해안로 460 2층">复制地址</button>。</li>
+                <li>室内顺手：헬로제주 월정리（Hello Jeju 月汀里店）<button class="copy-btn" data-copy="헬로제주 월정리">复制韩文</button>在同地址 1 楼。</li>
+                <li>雨天原则：不再另绕别的小店。</li>
+              </ul>
+              <div class="chips">
+                <span class="chip">雨天室内长停</span>
+                <span class="chip">moumoon 固定点</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="slot">
+          <div class="time">14:40–20:00</div>
+          <div class="card">
+            <div class="control-row">
+              <strong>Day 2 天气：</strong>
+              <label>
+                <input type="radio" name="day2_weather" value="sunny" checked />
+                <span>晴天</span>
+              </label>
+              <label>
+                <input type="radio" name="day2_weather" value="rain" />
+                <span>下雨</span>
+              </label>
+            </div>
+
+            <div data-meal-choice-group="day2_dinner"></div>
+
+            <div class="variant active" data-group="day2_weather" data-value="sunny">
+              <h3>细花短停后回咸德晚餐</h3>
+              <p>控制步行强度，晚上回酒店附近解决。</p>
+              <ul class="detail-list">
+                <li>线路：
+                  <ul class="nested-list">
+                    <li>머문 베이커리카페（머문 贝果咖啡）<button class="copy-btn" data-copy="머문 베이커리카페">复制韩文</button> → 세화해수욕장（细花海水浴场）<button class="copy-btn" data-copy="세화해수욕장">复制韩文</button></li>
+                    <li>세화해수욕장（细花海水浴场）<button class="copy-btn" data-copy="세화해수욕장">复制韩文</button> → 글로스터호텔 함덕（咸德格洛斯特酒店）<button class="copy-btn" data-copy="글로스터호텔 함덕">复制韩文</button></li>
+                  </ul>
+                </li>
+                <li>Naver 核验：moumoon 到细花约 15 分钟 / 8.1 km；细花回咸德约 28 分钟 / 20 km。</li>
+                <li>后半段交通预算：约 150–195 元 / 车。</li>
+                <li>细花顺手小店：
+                  <ul class="nested-list">
+                    <li>펠롱잡화점（闪亮杂货店）<button class="copy-btn" data-copy="펠롱잡화점">复制韩文</button>：最稳。</li>
+                    <li>세화소품관（细花小物馆）<button class="copy-btn" data-copy="세화소품관">复制韩文</button>：靠海边，现场经过再看。</li>
+                    <li>여름문구사（夏日文具社）<button class="copy-btn" data-copy="여름문구사">复制韩文</button>：适合文具控，常见营业到 18:00 且有固定休息日。</li>
+                  </ul>
+                </li>
+              </ul>
+              <div class="chips">
+                <span class="chip">Day 2 后半段交通约 150–195 元</span>
+              </div>
+            </div>
+
+            <div class="variant" data-group="day2_weather" data-value="rain">
+              <h3>月汀里室内停留后回咸德</h3>
+              <p>保留 moumoon，取消细花，缩短海边暴露时间，晚餐提前回酒店附近。</p>
+              <ul class="detail-list">
+                <li>线路：
+                  <ul class="nested-list">
+                    <li>글로스터호텔 함덕（咸德格洛斯特酒店）<button class="copy-btn" data-copy="글로스터호텔 함덕">复制韩文</button> → 월정리해수욕장（月汀里海水浴场）<button class="copy-btn" data-copy="월정리해수욕장">复制韩文</button></li>
+                    <li>월정리해수욕장（月汀里海水浴场）<button class="copy-btn" data-copy="월정리해수욕장">复制韩文</button> → 머문 베이커리카페（머문 贝果咖啡）<button class="copy-btn" data-copy="머문 베이커리카페">复制韩文</button></li>
+                    <li>머문 베이커리카페（머문 贝果咖啡）<button class="copy-btn" data-copy="머문 베이커리카페">复制韩文</button> → 글로스터호텔 함덕（咸德格洛斯特酒店）<button class="copy-btn" data-copy="글로스터호텔 함덕">复制韩文</button></li>
+                  </ul>
+                </li>
+                <li>Naver 核验：moumoon 直接回咸德约 21 分钟 / 14 km。</li>
+                <li>后半段交通预算：约 75–125 元 / 车。</li>
+              </ul>
+              <div class="chips">
+                <span class="chip">Day 2 后半段交通约 75–125 元</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="day">
+        <h2>Day 3</h2>
+        <p class="day-note">全程不爬山。城山只走山脚观景区和平地拍照。</p>
+
+        <div class="slot">
+          <div class="time">08:30–09:20</div>
+          <div class="card">
+            <h3>咸德早餐</h3>
+            <p>退房前吃好，进入东岸地标区。</p>
+            <div data-meal-choice-group="day3_breakfast"></div>
+          </div>
+        </div>
+
+        <div class="slot">
+          <div class="time">09:20–10:10</div>
+          <div class="card">
+            <h3>打车去城山</h3>
+            <p>退房后点到点去东岸地标区，行李随车走，不在中途增加短碎移动。</p>
+            <ul class="detail-list">
+              <li>线路：글로스터호텔 함덕（咸德格洛斯特酒店）<button class="copy-btn" data-copy="글로스터호텔 함덕">复制韩文</button>→ 성산일출봉（城山日出峰）<button class="copy-btn" data-copy="성산일출봉">复制韩文</button>山脚观景区。</li>
+              <li>Naver 核验：约 46 分钟 / 32 km。</li>
+              <li>执行预算：约 155–190 元 / 车。</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="slot">
+          <div class="time">10:10–11:20</div>
+          <div class="card">
+            <div class="control-row">
+              <strong>城山山脚：</strong>
+              <label>
+                <input type="radio" name="day3_seongsan_weather" value="sunny" checked />
+                <span>晴天</span>
+              </label>
+              <label>
+                <input type="radio" name="day3_seongsan_weather" value="rain" />
+                <span>下雨</span>
+              </label>
+            </div>
+
+            <div class="variant active" data-group="day3_seongsan" data-value="sunny">
+              <h3>城山山脚观景</h3>
+              <p>只在山脚和平地观景区拍照，不登顶，不把体力消耗放在上午。</p>
+              <div class="chips">
+                <span class="chip warn">不爬山</span>
+              </div>
+            </div>
+
+            <div class="variant" data-group="day3_seongsan" data-value="rain">
+              <h3>城山山脚短停后进室内</h3>
+              <p>雨天不做山脚久留；只在 성산일출봉（城山日出峰）<button class="copy-btn" data-copy="성산일출봉">复制韩文</button>附近下车确认能见度，拍 5–10 分钟后去城山附近午餐点避雨。</p>
+              <div class="chips">
+                <span class="chip warn">不爬山</span>
+                <span class="chip">雨天短停</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="slot">
+          <div class="time">11:20–12:30</div>
+          <div class="card">
+            <h3>城山附近午餐</h3>
+            <p>午餐选城山附近不绕路的店，吃完再去涉地可支。</p>
+            <div data-meal-choice-group="day3_lunch"></div>
+            <ul class="detail-list">
+              <li>预算：2 人约 150–360 元。</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="slot">
+          <div class="time">12:30–13:50</div>
+          <div class="card">
+            <div class="control-row">
+              <strong>涉地可支：</strong>
+              <label>
+                <input type="radio" name="day3_seopjikoji_weather" value="sunny" checked />
+                <span>晴天</span>
+              </label>
+              <label>
+                <input type="radio" name="day3_seopjikoji_weather" value="rain" />
+                <span>下雨</span>
+              </label>
+            </div>
+
+            <div class="variant active" data-group="day3_seopjikoji" data-value="sunny">
+              <h3>涉地可支平地走</h3>
+              <p>灯塔和海岸线拍照，控制步行距离。</p>
+              <ul class="detail-list">
+                <li>线路：성산일출봉（城山日出峰）<button class="copy-btn" data-copy="성산일출봉">复制韩文</button>→ 섭지코지（涉地可支）<button class="copy-btn" data-copy="섭지코지">复制韩文</button>平地段。</li>
+                <li>Naver 核验：约 12 分钟 / 6.3 km。</li>
+                <li>执行预算：约 45–60 元 / 车。</li>
+              </ul>
+            </div>
+
+            <div class="variant" data-group="day3_seopjikoji" data-value="rain">
+              <h3>跳过涉地可支久走，直接去下一段</h3>
+              <p>雨大或风大时不走海岸线；从 성산일출봉（城山日出峰）<button class="copy-btn" data-copy="성산일출봉">复制韩文</button>附近按下列路径二选一，减少湿滑路面和海边风雨暴露。</p>
+              <ul class="detail-list">
+                <li>去 성산포항종합여객터미널（城山港综合客运站）<button class="copy-btn" data-copy="성산포항종합여객터미널">复制韩文</button>，看船班后再决定后续。</li>
+                <li>直接回 제주시（济州市）<button class="copy-btn" data-copy="제주시">复制韩文</button>，转室内点位。</li>
+              </ul>
+              <ul class="detail-list">
+                <li>保留预算缓冲：涉地可支短车约 45–60 元 / 车；现场取消时底部可把实际金额填 0。</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="slot">
+          <div class="time">13:50–18:00</div>
+          <div class="card">
+            <div class="control-row">
+              <strong>Day 3 方案：</strong>
+              <label>
+                <input type="radio" name="day3_plan" value="udo_yes" checked />
+                <span>去牛岛</span>
+              </label>
+              <label>
+                <input type="radio" name="day3_plan" value="udo_no" />
+                <span>回济州市游玩</span>
+              </label>
+              <label>
+                <input type="radio" name="day3_plan" value="rain_plan" />
+                <span>下雨方案（不跑海边）</span>
+              </label>
+            </div>
+
+            <div class="variant active" data-group="day3" data-value="udo_yes">
+              <h3>先到城山港，再按船班决定牛岛</h3>
+              <p>先判断船班和风浪，再决定是否进牛岛；免税店和补货都只做顺手点。</p>
+              <div class="table-scroll">
+                <table class="info-table step-table">
+                  <thead>
+                    <tr>
+                      <th>时间</th>
+                      <th>动作</th>
+                      <th>执行边界</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>13:50–14:20</td>
+                      <td>섭지코지（涉地可支）<button class="copy-btn" data-copy="섭지코지">复制韩文</button> → 성산포항종합여객터미널（城山港综合客运站）<button class="copy-btn" data-copy="성산포항종합여객터미널">复制韩文</button></td>
+                      <td>Naver 核验约 12 分钟 / 6.9 km；到港后先看船班和排队。</td>
+                    </tr>
+                    <tr>
+                      <td>14:20–15:40</td>
+                      <td>우도（牛岛）<button class="copy-btn" data-copy="우도">复制韩文</button>轻量体验</td>
+                      <td>只在船班、风浪、排队都合适时执行；只做短停或轻松环岛，不爬坡。</td>
+                    </tr>
+                    <tr>
+                      <td>15:40–17:50</td>
+                      <td>성산포항종합여객터미널（城山港综合客运站）<button class="copy-btn" data-copy="성산포항종합여객터미널">复制韩文</button> → 벤티모 호텔 앤 레지던스 제주（济州文蒂莫酒店及公寓）<button class="copy-btn" data-copy="벤티모 호텔 앤 레지던스 제주">复制韩文</button></td>
+                      <td>Naver 核验约 1 小时 8 分钟 / 48 km；保留 Day 4 缓冲。</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <ul class="detail-list">
+                <li>顺手购物：
+                  <ul class="nested-list">
+                    <li>제주관광공사 성산면세점（济州观光公社城山免税店）<button class="copy-btn" data-copy="제주관광공사 성산면세점">复制韩文</button>：城山港内，适合买酒类、烟草、香水 / 化妆品、济州本地化妆品和小件伴手礼。</li>
+                    <li>现场确认：인도장（免税品提货处）<button class="copy-btn" data-copy="인도장">复制韩文</button>和航班 / 船票要求。</li>
+                    <li>赶牛岛时，免税店只看 <strong>20–30 分钟</strong>，不要久逛。</li>
+                  </ul>
+                </li>
+                <li>城山补货只选一个：
+                  <ul class="nested-list">
+                    <li>안녕성산（你好城山）<button class="copy-btn" data-copy="안녕성산">复制韩文</button>：城山日出峰附近，适合景区小物。</li>
+                    <li>제주선물가게 본점（济州礼物店本店）<button class="copy-btn" data-copy="제주선물가게 본점">复制韩文</button>：更像大店，适合买零食、果冻、巧克力和玩偶。</li>
+                  </ul>
+                </li>
+                <li>涉地可支 / 城山港后半段本岛出租车预算：约 270–330 元。</li>
+                <li>牛岛增量预算：0–260 元（船票和岛内轻交通）。</li>
+              </ul>
+              <div class="chips">
+                <span class="chip">Day 3 交通约 470–840 元</span>
+                <span class="chip">牛岛增量 0–260 元</span>
+              </div>
+            </div>
+
+            <div class="variant" data-group="day3" data-value="udo_no">
+              <h3>回济州市轻逛后到 Ventimo</h3>
+              <p>不赶船，把下午换成市区轻逛；只选 1–2 个近点。</p>
+              <div class="table-scroll">
+                <table class="info-table step-table">
+                  <thead>
+                    <tr>
+                      <th>时间</th>
+                      <th>动作</th>
+                      <th>选择</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>13:50–15:10</td>
+                      <td>回 제주시（济州市）<button class="copy-btn" data-copy="제주시">复制韩文</button>：
+                        <ul class="nested-list">
+                          <li>起点 A：성산일출봉（城山日出峰）<button class="copy-btn" data-copy="성산일출봉">复制韩文</button></li>
+                          <li>起点 B：섭지코지（涉地可支）<button class="copy-btn" data-copy="섭지코지">复制韩文</button></li>
+                        </ul>
+                      </td>
+                      <td>Naver 核验约 1 小时 2–4 分钟 / 43–44 km。</td>
+                    </tr>
+                    <tr>
+                      <td>15:10–17:30</td>
+                      <td>济州市轻逛</td>
+                      <td>제주동문시장（东门市场）<button class="copy-btn" data-copy="제주동문시장">复制韩文</button>、탑동광장（塔洞广场）<button class="copy-btn" data-copy="탑동광장">复制韩文</button>、누웨마루거리（Nuemaru 街）<button class="copy-btn" data-copy="누웨마루거리">复制韩文</button>三选一到两项。</td>
+                    </tr>
+                    <tr>
+                      <td>17:30–18:00</td>
+                      <td>제주시（济州市）<button class="copy-btn" data-copy="제주시">复制韩文</button> → 벤티모 호텔 앤 레지던스 제주（济州文蒂莫酒店及公寓）<button class="copy-btn" data-copy="벤티모 호텔 앤 레지던스 제주">复制韩文</button></td>
+                      <td>市区到 Ventimo 约 17–18 分钟 / 4.8–5.1 km。</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <ul class="detail-list">
+                <li>东门市场买手信：
+                  <ul class="nested-list">
+                    <li>태향 제주특산물할인매장（泰香济州特产折扣店）<button class="copy-btn" data-copy="태향 제주특산물할인매장">复制韩文</button>：适合买批量零食。</li>
+                    <li>小红书“老爷爷店”：按地下商城 11 / 12 号门现场寻店；未能 Naver 独立核出唯一店名。</li>
+                  </ul>
+                </li>
+                <li>后半段回济州市交通预算：约 245–320 元。</li>
+                <li>加项预算：济州市轻逛约 0–220 元。</li>
+              </ul>
+              <div class="chips">
+                <span class="chip">Day 3 交通约 445–570 元</span>
+                <span class="chip">不赶船班</span>
+              </div>
+            </div>
+
+            <div class="variant" data-group="day3" data-value="rain_plan">
+              <h3>下雨方案：回济州市室内轻逛后到 Ventimo</h3>
+              <p>雨大时不硬走海岸线；上午短停点位按下列二选一，下午回济州市室内点位。</p>
+              <ul class="detail-list">
+                <li>短停 A：성산일출봉（城山日出峰）<button class="copy-btn" data-copy="성산일출봉">复制韩文</button></li>
+                <li>短停 B：섭지코지（涉地可支）<button class="copy-btn" data-copy="섭지코지">复制韩文</button></li>
+              </ul>
+              <div class="table-scroll">
+                <table class="info-table step-table">
+                  <thead>
+                    <tr>
+                      <th>时间</th>
+                      <th>动作</th>
+                      <th>雨天边界</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>09:20–11:30</td>
+                      <td>从 글로스터호텔 함덕（咸德格洛斯特酒店）<button class="copy-btn" data-copy="글로스터호텔 함덕">复制韩文</button>出发；雨势小再短停 성산일출봉（城山日出峰）<button class="copy-btn" data-copy="성산일출봉">复制韩文</button></td>
+                      <td>雨大时跳过海岸线。</td>
+                    </tr>
+                    <tr>
+                      <td>11:30–13:00</td>
+                      <td>就近午餐</td>
+                      <td>2 人约 150–360 元，用午餐窗口等雨势。</td>
+                    </tr>
+                    <tr>
+                      <td>13:00–17:30</td>
+                      <td>回 제주시（济州市）<button class="copy-btn" data-copy="제주시">复制韩文</button>后安排室内 / 半室内轻逛</td>
+                      <td>优先点位：
+                        <ul class="nested-list">
+                          <li>제주동문시장（东门市场）<button class="copy-btn" data-copy="제주동문시장">复制韩文</button></li>
+                          <li>商圈补给</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>17:30–18:00</td>
+                      <td>제주시（济州市）<button class="copy-btn" data-copy="제주시">复制韩文</button> → 벤티모 호텔 앤 레지던스 제주（济州文蒂莫酒店及公寓）<button class="copy-btn" data-copy="벤티모 호텔 앤 레지던스 제주">复制韩文</button></td>
+                      <td>收束到机场附近。</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <ul class="detail-list">
+                <li>雨天补货：
+                  <ul class="nested-list">
+                    <li>태향 제주특산물할인매장（泰香济州特产折扣店）<button class="copy-btn" data-copy="태향 제주특산물할인매장">复制韩文</button>：适合一次买齐包装零食。</li>
+                    <li>小红书“老爷爷店”：只作为现场寻店线索。</li>
+                  </ul>
+                </li>
+                <li>雨天后半段交通预算：约 120–270 元；室内或半室内加项约 0–180 元。</li>
+              </ul>
+              <div class="chips">
+                <span class="chip">雨天室内节奏</span>
+                <span class="chip">Day 3 交通约 320–520 元</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="slot">
+          <div class="time">18:00–20:00</div>
+          <div class="card">
+            <h3>Ventimo 周边晚餐</h3>
+            <p>不再跨区，收束当天节奏。</p>
+            <div data-meal-choice-group="day3_dinner"></div>
+            <ul class="detail-list">
+              <li>晚餐在 벤티모 호텔 앤 레지던스 제주（济州文蒂莫酒店及公寓）<button class="copy-btn" data-copy="벤티모 호텔 앤 레지던스 제주">复制韩文</button>周边解决，2 人约 180–420 元。</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <article class="day">
+        <h2>Day 4</h2>
+        <p class="day-note">最后一天固定 14:00 航班，不再提供航班时段切换。</p>
+
+        <div class="slot">
+          <div class="time">09:00–10:00</div>
+          <div class="card">
+            <h3>Ventimo 附近早餐</h3>
+            <p>早餐按下列方式解决，不为早餐打远车。</p>
+            <ul class="detail-list">
+              <li>酒店内早餐。</li>
+              <li>步行圈早餐。</li>
+            </ul>
+            <div data-meal-choice-group="day4_breakfast"></div>
+            <ul class="detail-list">
+              <li>早餐预算：2 人约 80–180 元。</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="slot">
+          <div class="time">10:00–11:30</div>
+          <div class="card">
+            <div class="control-row">
+              <strong>酒店周边补给：</strong>
+              <label>
+                <input type="radio" name="day4_supply_weather" value="sunny" checked />
+                <span>晴天</span>
+              </label>
+              <label>
+                <input type="radio" name="day4_supply_weather" value="rain" />
+                <span>下雨</span>
+              </label>
+            </div>
+
+            <div class="variant active" data-group="day4_supply" data-value="sunny">
+              <h3>酒店周边补给</h3>
+              <p>咖啡、便利店、Olive Young 类补货都放在步行圈，不再跨区；正式伴手礼主力放到下列点位。</p>
+              <ul class="detail-list">
+                <li>东门市场。</li>
+                <li>Osulloc。</li>
+                <li>机场补货。</li>
+              </ul>
+              <ul class="detail-list">
+                <li>补给预算：2 人约 0–120 元。</li>
+              </ul>
+            </div>
+
+            <div class="variant" data-group="day4_supply" data-value="rain">
+              <h3>取消步行补给，留在酒店整理</h3>
+              <p>雨天不为补给专门出门；在 벤티모 호텔 앤 레지던스 제주（济州文蒂莫酒店及公寓）<button class="copy-btn" data-copy="벤티모 호텔 앤 레지던스 제주">复制韩文</button>整理行李，必要时只去最近便利店。</p>
+              <ul class="detail-list">
+                <li>补给预算：2 人约 0–60 元。</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="slot">
+          <div class="time">11:30–12:00</div>
+          <div class="card">
+            <h3>退房并叫车</h3>
+            <p>不拖到最后，预留接单、下楼和装行李时间。</p>
+            <div class="chips">
+              <span class="chip">固定 14:00 航班</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="slot">
+          <div class="time">12:00–12:20</div>
+          <div class="card">
+            <h3>从 Ventimo 到机场</h3>
+            <p>短车到 제주국제공항（济州国际机场）<button class="copy-btn" data-copy="제주국제공항">复制韩文</button>收尾，不再跨区安排活动。</p>
+            <ul class="detail-list">
+              <li>路线：벤티모 호텔 앤 레지던스 제주（济州文蒂莫酒店及公寓）<button class="copy-btn" data-copy="벤티모 호텔 앤 레지던스 제주">复制韩文</button>→ 제주국제공항（济州国际机场）<button class="copy-btn" data-copy="제주국제공항">复制韩文</button>。</li>
+              <li>Naver 核验：约 5 分钟 / 1.9 km。</li>
+              <li>机场短车：约 23–40 元。</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="slot">
+          <div class="time">12:20–14:00</div>
+          <div class="card">
+            <h3>值机安检候机</h3>
+            <p>保守留足机场余量，14:00 航班按固定节奏收尾。</p>
+            <ul class="detail-list">
+              <li>时间充裕时只做机场补货：
+                <ul class="nested-list">
+                  <li>파리바게트（巴黎贝甜）<button class="copy-btn" data-copy="파리바게트">复制韩文</button>：마음샌드（心意夹心饼）<button class="copy-btn" data-copy="마음샌드">复制韩文</button>。</li>
+                  <li>특산품（特产品）<button class="copy-btn" data-copy="특산품">复制韩文</button>店：包装食品。</li>
+                  <li>JDC 면세점（JDC 免税店）<button class="copy-btn" data-copy="JDC 면세점">复制韩文</button>：美妆 / 香水 / 红参 / 巧克力。</li>
+                </ul>
+              </li>
+              <li>不作为回国伴手礼：
+                <ul class="nested-list">
+                  <li>감귤류（柑橘类鲜果）<button class="copy-btn" data-copy="감귤류">复制韩文</button></li>
+                  <li>젓갈류（腌海鲜）<button class="copy-btn" data-copy="젓갈류">复制韩文</button></li>
+                  <li>흑돼지（黑猪肉）<button class="copy-btn" data-copy="흑돼지">复制韩文</button></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="foot" id="budgetSummary">
+      <div class="budget-line">总花费（所有 session）：<span class="budget-range" id="currentBudgetRange">0 元</span></div>
+      <div class="budget-note" id="budgetActualNote">按每个 session 已填写的实际金额实时汇总；未填写的不计入。</div>
+    </section>
+
+    <div class="toast" id="copyToast">已复制</div>
+    <button class="jump-current-btn" id="jumpCurrentTime" type="button">现在</button>
+  </main>
+
+  <script>
+    const STORAGE_PREFIX = 'jeju-east-timeline:';
+    const TRIP_START_DATE = '2026-06-01';
+    const WEATHER_REFRESH_MS = 60000;
+    const WEATHER_ENDPOINT = 'https://api.open-meteo.com/v1/forecast';
+    const MET_WEATHER_ENDPOINT = 'https://api.met.no/weatherapi/locationforecast/2.0/compact';
+    const MET_WEATHER_FALLBACK_REFRESH_MS = 30 * 60000;
+    const WEATHER_POINTS = [
+      { key: 'airport', label: '机场', latitude: 33.511, longitude: 126.493 },
+      { key: 'hamdeok', label: '咸德', latitude: 33.543, longitude: 126.669 },
+      { key: 'woljeong', label: '月汀里', latitude: 33.556, longitude: 126.795 },
+      { key: 'sehwa', label: '细花', latitude: 33.525, longitude: 126.858 },
+      { key: 'seopjikoji', label: '涉地可支', latitude: 33.424, longitude: 126.927 },
+      { key: 'seongsan', label: '城山', latitude: 33.459, longitude: 126.942 }
+    ];
+    const WEATHER_SLOT_POINTS = [
+      ['airport', 'airport', 'hamdeok', 'hamdeok'],
+      ['hamdeok', 'woljeong', 'woljeong', 'sehwa'],
+      ['hamdeok', 'seongsan', 'seongsan', 'seongsan', 'seopjikoji', 'seongsan', 'airport'],
+      ['airport', 'airport', 'airport', 'airport', 'airport']
+    ];
+    const WEATHER_CODE_LABELS = {
+      0: '晴',
+      1: '基本晴',
+      2: '多云',
+      3: '阴',
+      45: '雾',
+      48: '雾',
+      51: '小毛毛雨',
+      53: '毛毛雨',
+      55: '强毛毛雨',
+      56: '冻毛毛雨',
+      57: '冻毛毛雨',
+      61: '小雨',
+      63: '中雨',
+      65: '大雨',
+      66: '冻雨',
+      67: '冻雨',
+      71: '小雪',
+      73: '中雪',
+      75: '大雪',
+      77: '雪粒',
+      80: '小阵雨',
+      81: '阵雨',
+      82: '强阵雨',
+      85: '阵雪',
+      86: '强阵雪',
+      95: '雷雨',
+      96: '雷雨',
+      99: '雷雨'
+    };
+    const WEATHER_RAIN_CODES = new Set([51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 71, 73, 75, 77, 80, 81, 82, 85, 86, 95, 96, 99]);
+    const WEATHER_CODE_SEVERITY = {
+      0: 0,
+      1: 1,
+      2: 2,
+      3: 3,
+      45: 4,
+      48: 4,
+      51: 5,
+      53: 6,
+      55: 7,
+      56: 7,
+      57: 8,
+      61: 8,
+      63: 9,
+      65: 10,
+      66: 9,
+      67: 10,
+      71: 7,
+      73: 8,
+      75: 9,
+      77: 7,
+      80: 8,
+      81: 9,
+      82: 10,
+      85: 8,
+      86: 9,
+      95: 11,
+      96: 12,
+      99: 12
+    };
+    const MET_SYMBOL_LABELS = {
+      clearsky: '晴',
+      fair: '基本晴',
+      partlycloudy: '多云',
+      cloudy: '阴',
+      fog: '雾',
+      lightrain: '小雨',
+      rain: '雨',
+      heavyrain: '大雨',
+      rainshowers: '阵雨',
+      lightrainshowers: '小阵雨',
+      heavyrainshowers: '强阵雨',
+      thunderstorm: '雷雨',
+      snow: '雪',
+      sleet: '雨夹雪'
+    };
+    const MET_SYMBOL_SEVERITY = {
+      clearsky: 0,
+      fair: 1,
+      partlycloudy: 2,
+      cloudy: 3,
+      fog: 4,
+      lightrain: 5,
+      lightrainshowers: 5,
+      rain: 7,
+      rainshowers: 7,
+      heavyrain: 9,
+      heavyrainshowers: 9,
+      thunderstorm: 10,
+      snow: 8,
+      sleet: 8
+    };
+    const COPY_LABELS = {
+      '고기국수': '猪肉汤面',
+      'JDC 면세점': 'JDC 免税店',
+      '감귤류': '柑橘类鲜果',
+      '고사리육개장': '蕨菜肉汤',
+      '글로스터호텔 함덕': '咸德格洛斯特酒店',
+      '김밥': '紫菜包饭',
+      '네이버 지도': 'Naver Map 地图',
+      '누웨마루거리': 'Nuemaru 街',
+      '다정이네김밥 제주공항점': '多情家紫菜包饭济州机场店',
+      '달믄곳': '月汀里相似之处小店',
+      '도두해녀의집': '道头海女之家',
+      '마음샌드': '心意夹心饼',
+      '머문 베이커리카페': 'moumoon 贝果咖啡',
+      '먹돌고기국수 제주본점': '墨石肉汤面济州本店',
+      '몽그레 월정리점': 'Mongle 月汀里店',
+      '벤티모 호텔 앤 레지던스 제주': '济州文蒂莫酒店及公寓',
+      '선물고팡 함덕점': '礼物仓咸德店',
+      '섭지코지': '涉地可支',
+      '성산일출봉': '城山日出峰',
+      '성산포항종합여객터미널': '城山港综合客运站',
+      '세화소품관': '细花小物馆',
+      '세화해수욕장': '细花海水浴场',
+      '안녕성산': '你好城山',
+      '인도장': '免税品提货处',
+      '여기로 가 주세요': '请带我到这里',
+      '여기서 내려 주세요': '请在这里停车',
+      '올리브영': 'Olive Young',
+      '여름문구사': '夏日文具社',
+      '우도': '牛岛',
+      '우진해장국': '佑珍醒酒汤',
+      '윗니스제주': 'Witness Jeju 香水店',
+      '월정리해수욕장': '月汀里海水浴场',
+      '읍/면/시': '行政区类型：邑 / 面 / 市',
+      '제주 제주시 구좌읍 해맞이해안로 460 2층': '济州济州市旧左邑迎日海岸路 460 2 层',
+      '제주관광공사 성산면세점': '济州观光公社城山免税店',
+      '제주 기념품': '济州纪念品',
+      '제주공항': '济州机场',
+      '제주국제공항': '济州国际机场',
+      '제주김만복김밥 본점': '济州金万福紫菜包饭本店',
+      '제주동문시장': '东门市场',
+      '제주화장품': '济州化妆品',
+      '제주선물가게 본점': '济州礼物店本店',
+      '젓갈류': '腌海鲜',
+      '제주시': '济州市',
+      '카카오 T': 'Kakao T 打车 App',
+      '카페': '咖啡',
+      '탑동': '塔洞',
+      '탑동광장': '塔洞广场',
+      '특산품': '特产品',
+      '태향 제주특산물할인매장': '泰香济州特产折扣店',
+      '파리바게트': '巴黎贝甜',
+      '펠롱잡화점': '闪亮杂货店',
+      '편의점': '便利店',
+      '함덕해변': '咸德海边',
+      '함덕해수욕장': '咸德海水浴场',
+      '헬로제주 월정리': 'Hello Jeju 月汀里店',
+      '호텔': '酒店',
+      '흑돼지': '黑猪肉',
+      '호텔 인근 식당': '酒店附近餐厅',
+      '갈치고등어섞어조림': '带鱼鲭鱼混合炖菜',
+      '갈치왕 성산점': '带鱼王城山店',
+      '갈치조림': '带鱼炖菜',
+      '게우볶음밥': '鲍鱼肠炒饭',
+      '고등어구이': '烤鲭鱼',
+      '고등어쌈밥': '鲭鱼包饭',
+      '돼지국밥': '猪肉汤饭',
+      '돔베고기': '砧板猪肉',
+      '맛나식당': '美味食堂',
+      '묵은지 김치찜': '陈泡菜炖菜',
+      '보말죽': '海螺粥',
+      '보말칼국수': '海螺刀削面',
+      '산지물식당 신제주점': '山地水食堂新济州店',
+      '삼무국수 제주본점': '三无汤面济州本店',
+      '성게비빔밥': '海胆拌饭',
+      '성산해녀짬뽕': '城山海女海鲜辣汤面',
+      '성심조림 제주공항점': '诚心炖菜济州机场店',
+      '순두부정식': '嫩豆腐定食',
+      '신제주보말칼국수 제주본점': '新济州海螺刀削面济州本店',
+      '열무국수': '萝卜缨冷面',
+      '웅이네 보말칼국수 제주본점': '熊家海螺刀削面济州本店',
+      '월정리 해녀식당 제주구좌김녕세화본점': '月汀里海女食堂济州旧左金宁细花本店',
+      '월정리갈비밥': '月汀里排骨饭',
+      '이어돈 함덕 그 첫번째이야기': '伊尔豚咸德第一故事',
+      '이춘옥원조고등어쌈밥 월정리김녕구좌읍점': '李春玉元祖鲭鱼包饭月汀里金宁旧左邑店',
+      '일품순두부 함덕점': '一品嫩豆腐咸德店',
+      '접짝뼈국': '接骨汤',
+      '정갈한 한식': '清爽韩式家常饭',
+      '정식': '韩式定食',
+      '제주삼춘 함덕해수욕장 흑돼지': '济州三叔咸德海水浴场黑猪',
+      '제주순풍해장국 함덕점': '济州顺风醒酒汤咸德店',
+      '제주흑돼지': '济州黑猪',
+      '제주흑돼지 오겹살': '济州黑猪五花',
+      '조선옥순두부정식 제주공항본점': '朝鲜屋嫩豆腐定食济州机场本店',
+      '한치물회': '小鱿鱼水会',
+      '함덕용두네해장국': '咸德龙头醒酒汤',
+      '해녀짬뽕': '海女海鲜辣汤面',
+      '해장국': '醒酒汤',
+      '해장살롱': '醒酒沙龙',
+      '흑돼지 갈비밥': '黑猪肉排骨饭',
+      '흑돼지 김치찌개': '黑猪肉泡菜锅',
+      '전복뚝배기': '鲍鱼砂锅',
+      '전복물회': '鲍鱼水会',
+      '전복죽': '鲍鱼粥'
+    };
+
+    const MEAL_CHOICE_GROUPS = {
+      day1_dinner: {
+        label: '咸德晚餐',
+        name: 'choice_day1_dinner',
+        estimateMin: 140,
+        estimateMax: 380,
+        options: [
+          {
+            value: 'ilpum_sundubu',
+            title: '一品嫩豆腐咸德店',
+            copy: '일품순두부 함덕점',
+            detail: '推荐食物：嫩豆腐定食（순두부정식）<button class="copy-btn" data-copy="순두부정식">复制</button>，<span class="choice-price">2 人约 110–200 元</span>；雨天或抵达日不想吃太撑时选。',
+            budgetMin: 110,
+            budgetMax: 200,
+            actualLabel: '一品嫩豆腐'
+          },
+          {
+            value: 'iedon_hamdeok',
+            title: '伊尔豚咸德第一故事',
+            copy: '이어돈 함덕 그 첫번째이야기',
+            detail: '推荐食物：济州黑猪五花（제주흑돼지 오겹살）<button class="copy-btn" data-copy="제주흑돼지 오겹살">复制</button>或黑猪肉泡菜锅（흑돼지 김치찌개）<button class="copy-btn" data-copy="흑돼지 김치찌개">复制</button>，<span class="choice-price">2 人约 260–520 元</span>；想把黑猪肉放在咸德解决时选。',
+            budgetMin: 260,
+            budgetMax: 520,
+            actualLabel: '伊尔豚咸德'
+          },
+          {
+            value: 'samchun_black_pork',
+            title: '济州三叔咸德海水浴场黑猪',
+            copy: '제주삼춘 함덕해수욕장 흑돼지',
+            detail: '推荐食物：济州黑猪（제주흑돼지）<button class="copy-btn" data-copy="제주흑돼지">复制</button>配萝卜缨冷面（열무국수）<button class="copy-btn" data-copy="열무국수">复制</button>，<span class="choice-price">2 人约 260–560 元</span>；海边晚餐氛围更强。',
+            budgetMin: 260,
+            budgetMax: 560,
+            actualLabel: '济州三叔黑猪'
+          }
+        ]
+      },
+      day2_breakfast: {
+        label: '咸德早餐',
+        name: 'choice_day2_breakfast',
+        estimateMin: 80,
+        estimateMax: 180,
+        options: [
+          {
+            value: 'sunpung_hamdeok',
+            title: '济州顺风醒酒汤咸德店',
+            copy: '제주순풍해장국 함덕점',
+            detail: '推荐食物：醒酒汤（해장국）<button class="copy-btn" data-copy="해장국">复制</button>、猪肉汤饭（돼지국밥）<button class="copy-btn" data-copy="돼지국밥">复制</button>或猪肉汤面（고기국수）<button class="copy-btn" data-copy="고기국수">复制</button>，<span class="choice-price">2 人约 110–220 元</span>；赶路前吃饱。',
+            budgetMin: 110,
+            budgetMax: 220,
+            actualLabel: '济州顺风醒酒汤咸德店'
+          },
+          {
+            value: 'yongdune_hamdeok',
+            title: '咸德龙头醒酒汤',
+            copy: '함덕용두네해장국',
+            detail: '推荐食物：接骨汤（접짝뼈국）<button class="copy-btn" data-copy="접짝뼈국">复制</button>或醒酒汤（해장국）<button class="copy-btn" data-copy="해장국">复制</button>，<span class="choice-price">2 人约 120–220 元</span>；海边短走前后都稳。',
+            budgetMin: 120,
+            budgetMax: 220,
+            actualLabel: '咸德龙头醒酒汤'
+          },
+          {
+            value: 'haejang_salon',
+            title: '醒酒沙龙',
+            copy: '해장살롱',
+            detail: '推荐食物：醒酒汤（해장국）<button class="copy-btn" data-copy="해장국">复制</button>或清爽韩式家常饭（정갈한 한식）<button class="copy-btn" data-copy="정갈한 한식">复制</button>，<span class="choice-price">2 人约 110–220 元</span>；早餐和雨天晚餐都能兜底。',
+            budgetMin: 110,
+            budgetMax: 220,
+            actualLabel: '醒酒沙龙'
+          }
+        ]
+      },
+      day2_lunch: {
+        label: '月汀里午餐',
+        name: 'choice_day2_lunch',
+        estimateMin: 140,
+        estimateMax: 360,
+        options: [
+          {
+            value: 'woljeong_galbibap',
+            title: '月汀里排骨饭',
+            copy: '월정리갈비밥',
+            detail: '推荐食物：黑猪肉排骨饭（흑돼지 갈비밥）<button class="copy-btn" data-copy="흑돼지 갈비밥">复制</button>，<span class="choice-price">2 人约 140–240 元</span>；近月汀里海边，午餐节奏最顺。',
+            budgetMin: 140,
+            budgetMax: 240,
+            actualLabel: '月汀里排骨饭'
+          },
+          {
+            value: 'lee_chunok_mackerel',
+            title: '李春玉元祖鲭鱼包饭月汀里金宁旧左邑店',
+            copy: '이춘옥원조고등어쌈밥 월정리김녕구좌읍점',
+            detail: '推荐食物：鲭鱼包饭（고등어쌈밥）<button class="copy-btn" data-copy="고등어쌈밥">复制</button>或陈泡菜炖菜（묵은지 김치찜）<button class="copy-btn" data-copy="묵은지 김치찜">复制</button>，<span class="choice-price">2 人约 160–300 元</span>；想吃鱼和韩式正餐时选。',
+            budgetMin: 160,
+            budgetMax: 300,
+            actualLabel: '李春玉鲭鱼包饭'
+          },
+          {
+            value: 'woljeong_haenyeo',
+            title: '月汀里海女食堂济州旧左金宁细花本店',
+            copy: '월정리 해녀식당 제주구좌김녕세화본점',
+            detail: '推荐食物：海胆拌饭（성게비빔밥）<button class="copy-btn" data-copy="성게비빔밥">复制</button>、小鱿鱼水会（한치물회）<button class="copy-btn" data-copy="한치물회">复制</button>或鲍鱼砂锅（전복뚝배기）<button class="copy-btn" data-copy="전복뚝배기">复制</button>，<span class="choice-price">2 人约 180–360 元</span>；海鲜感最强。',
+            budgetMin: 180,
+            budgetMax: 360,
+            actualLabel: '月汀里海女食堂'
+          }
+        ]
+      },
+      day2_dinner: {
+        label: '咸德晚餐',
+        name: 'choice_day2_dinner',
+        estimateMin: 140,
+        estimateMax: 380,
+        options: []
+      },
+      day3_breakfast: {
+        label: '咸德退房早餐',
+        name: 'choice_day3_breakfast',
+        estimateMin: 80,
+        estimateMax: 180,
+        options: []
+      },
+      day3_lunch: {
+        label: '城山午餐',
+        name: 'choice_day3_lunch',
+        estimateMin: 150,
+        estimateMax: 360,
+        options: [
+          {
+            value: 'matna_seongsan',
+            title: '美味食堂',
+            copy: '맛나식당',
+            detail: '推荐食物：带鱼鲭鱼混合炖菜（갈치고등어섞어조림）<button class="copy-btn" data-copy="갈치고등어섞어조림">复制</button>，<span class="choice-price">2 人约 150–260 元</span>；本地鱼类炖菜，午餐窗口等雨也合适。',
+            budgetMin: 150,
+            budgetMax: 260,
+            actualLabel: '美味食堂'
+          },
+          {
+            value: 'galchiwang_seongsan',
+            title: '带鱼王城山店',
+            copy: '갈치왕 성산점',
+            detail: '推荐食物：带鱼炖菜（갈치조림）<button class="copy-btn" data-copy="갈치조림">复制</button>配烤鲭鱼（고등어구이）<button class="copy-btn" data-copy="고등어구이">复制</button>，<span class="choice-price">2 人约 180–360 元</span>；份量稳。',
+            budgetMin: 180,
+            budgetMax: 360,
+            actualLabel: '带鱼王城山店'
+          },
+          {
+            value: 'haenyeo_jjamppong',
+            title: '城山海女海鲜辣汤面',
+            copy: '성산해녀짬뽕',
+            detail: '推荐食物：海女海鲜辣汤面（해녀짬뽕）<button class="copy-btn" data-copy="해녀짬뽕">复制</button>或鲍鱼肠炒饭（게우볶음밥）<button class="copy-btn" data-copy="게우볶음밥">复制</button>，<span class="choice-price">2 人约 160–300 元</span>；雨天想吃热汤面时选。',
+            budgetMin: 160,
+            budgetMax: 300,
+            actualLabel: '城山海女海鲜辣汤面'
+          }
+        ]
+      },
+      day3_dinner: {
+        label: 'Ventimo 周边晚餐',
+        name: 'choice_day3_dinner',
+        estimateMin: 180,
+        estimateMax: 420,
+        options: [
+          {
+            value: 'seongsim_jorim',
+            title: '诚心炖菜济州机场店',
+            copy: '성심조림 제주공항점',
+            detail: '推荐食物：带鱼炖菜（갈치조림）<button class="copy-btn" data-copy="갈치조림">复制</button>或烤鲭鱼（고등어구이）<button class="copy-btn" data-copy="고등어구이">复制</button>，<span class="choice-price">2 人约 180–360 元</span>；最后一晚想吃正式韩餐时选。',
+            budgetMin: 180,
+            budgetMax: 360,
+            actualLabel: '诚心炖菜'
+          },
+          {
+            value: 'sammu_guksu',
+            title: '三无汤面济州本店',
+            copy: '삼무국수 제주본점',
+            detail: '推荐食物：猪肉汤面（고기국수）<button class="copy-btn" data-copy="고기국수">复制</button>配砧板猪肉（돔베고기）<button class="copy-btn" data-copy="돔베고기">复制</button>，<span class="choice-price">2 人约 120–260 元</span>；不想太撑时选。',
+            budgetMin: 120,
+            budgetMax: 260,
+            actualLabel: '三无汤面'
+          },
+          {
+            value: 'sanjimul_sinjeju',
+            title: '山地水食堂新济州店',
+            copy: '산지물식당 신제주점',
+            detail: '推荐食物：韩式定食（정식）<button class="copy-btn" data-copy="정식">复制</button>，<span class="choice-price">2 人约 160–220 元</span>；想吃家常定食时选。',
+            budgetMin: 160,
+            budgetMax: 220,
+            actualLabel: '山地水食堂'
+          }
+        ]
+      },
+      day4_breakfast: {
+        label: 'Ventimo 外部早餐',
+        name: 'choice_day4_breakfast',
+        estimateMin: 80,
+        estimateMax: 180,
+        options: [
+          {
+            value: 'sinjeju_bomal',
+            title: '新济州海螺刀削面济州本店',
+            copy: '신제주보말칼국수 제주본점',
+            detail: '推荐食物：海螺刀削面（보말칼국수）<button class="copy-btn" data-copy="보말칼국수">复制</button>或海螺粥（보말죽）<button class="copy-btn" data-copy="보말죽">复制</button>，<span class="choice-price">2 人约 120–220 元</span>；最后一天热汤面稳。',
+            budgetMin: 120,
+            budgetMax: 220,
+            actualLabel: '新济州海螺刀削面'
+          },
+          {
+            value: 'woong_bomal',
+            title: '熊家海螺刀削面济州本店',
+            copy: '웅이네 보말칼국수 제주본점',
+            detail: '推荐食物：海螺刀削面（보말칼국수）<button class="copy-btn" data-copy="보말칼국수">复制</button>，<span class="choice-price">2 人约 120–220 元</span>；机场 / 道厅附近短车可达。',
+            budgetMin: 120,
+            budgetMax: 220,
+            actualLabel: '熊家海螺刀削面'
+          },
+          {
+            value: 'joseonok_sundubu',
+            title: '朝鲜屋嫩豆腐定食济州机场本店',
+            copy: '조선옥순두부정식 제주공항본점',
+            detail: '推荐食物：嫩豆腐定食（순두부정식）<button class="copy-btn" data-copy="순두부정식">复制</button>，<span class="choice-price">2 人约 90–160 元</span>；想吃轻量热食时选。',
+            budgetMin: 90,
+            budgetMax: 160,
+            actualLabel: '朝鲜屋嫩豆腐定食'
+          }
+        ]
+      }
+    };
+
+    MEAL_CHOICE_GROUPS.day2_dinner.options = MEAL_CHOICE_GROUPS.day1_dinner.options;
+    MEAL_CHOICE_GROUPS.day3_breakfast.options = MEAL_CHOICE_GROUPS.day2_breakfast.options;
+
+    function renderMealChoiceGroups() {
+      document.querySelectorAll('[data-meal-choice-group]').forEach((placeholder) => {
+        const key = placeholder.dataset.mealChoiceGroup;
+        const config = MEAL_CHOICE_GROUPS[key];
+        if (!config) return;
+        const group = document.createElement('div');
+        group.className = 'choice-group';
+        group.dataset.budgetChoiceGroup = key;
+        group.dataset.choiceLabel = config.label;
+        group.dataset.estimateMin = String(config.estimateMin);
+        group.dataset.estimateMax = String(config.estimateMax);
+        group.innerHTML = config.options.map((option) => `
+          <label class="choice-option">
+            <span class="choice-select">
+              <input type="radio" name="${config.name}" value="${option.value}" data-budget-min="${option.budgetMin}" data-budget-max="${option.budgetMax}" />
+              <span class="choice-title">${option.title}（${option.copy}）<button class="copy-btn" data-copy="${option.copy}">复制</button></span>
+            </span>
+            <span class="choice-detail">${option.detail}</span>
+            <span class="choice-actual">实际 <input type="text" inputmode="decimal" autocomplete="off" placeholder="填写" data-choice-actual="1" aria-label="${config.label}实际金额：${option.actualLabel}" /> 元</span>
+          </label>
+        `).join('');
+        placeholder.replaceWith(group);
+      });
+    }
+
+    function escapeRegExp(text) {
+      return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    function findCopyTextReplacement(text, korean, label) {
+      const escapedKorean = escapeRegExp(korean);
+      const escapedLabel = escapeRegExp(label);
+      const patterns = [
+        new RegExp('[“"”]?' + escapedKorean + '[”"]?（[^（）]+）$'),
+        new RegExp(escapedKorean + '（[^（）]+）$'),
+        new RegExp('[A-Za-z][A-Za-z0-9 .·/+-]*（' + escapedKorean + '[^（）]*）$'),
+        new RegExp('行政区（' + escapedKorean + '[^（）]*）$'),
+        new RegExp(escapedLabel + '（' + escapedKorean + '[^（）]*）$'),
+        new RegExp('（' + escapedKorean + '[^（）]*）$'),
+        new RegExp(escapedKorean + '$')
+      ];
+
+      for (const pattern of patterns) {
+        const match = text.match(pattern);
+        if (!match) continue;
+        const matchedText = match[0];
+        const replacement = matchedText.startsWith('（') ? '' : label;
+        return {
+          before: text.slice(0, match.index),
+          replacement
+        };
+      }
+      return null;
+    }
+
+    function wrapCopyButton(btn, korean) {
+      if (btn.closest('.ko-copy-chip')) return;
+      const chip = document.createElement('span');
+      chip.className = 'ko-copy-chip';
+      chip.lang = 'ko';
+      chip.dataset.copy = korean;
+      chip.setAttribute('role', 'button');
+      chip.tabIndex = 0;
+      chip.setAttribute('aria-label', '复制韩语：' + korean);
+
+      const text = document.createElement('span');
+      text.className = 'ko-copy-text';
+      text.textContent = korean;
+
+      btn.parentNode.insertBefore(chip, btn);
+      chip.append(text, btn);
+    }
+
+    function normalizeCopyLabels() {
+      document.querySelectorAll('.copy-btn').forEach((btn) => {
+        const korean = btn.getAttribute('data-copy') || '';
+        const label = COPY_LABELS[korean];
+        btn.textContent = '复制';
+        if (!korean || !label) return;
+        const previous = btn.previousSibling;
+        if (!previous || previous.nodeType !== Node.TEXT_NODE) return;
+        const replacement = findCopyTextReplacement(previous.nodeValue, korean, label);
+        if (!replacement) return;
+        previous.nodeValue = replacement.before + replacement.replacement;
+        wrapCopyButton(btn, korean);
+      });
+    }
+
+    function storageGet(key) {
+      try {
+        return window.localStorage.getItem(STORAGE_PREFIX + key);
+      } catch (err) {
+        return null;
+      }
+    }
+
+    function storageSet(key, value) {
+      try {
+        window.localStorage.setItem(STORAGE_PREFIX + key, value);
+      } catch (err) {
+        // localStorage may be unavailable in private browsing or restricted file contexts.
+      }
+    }
+
+    function storageRemove(key) {
+      try {
+        window.localStorage.removeItem(STORAGE_PREFIX + key);
+      } catch (err) {
+        // Keep the page usable even when storage is unavailable.
+      }
+    }
+
+    function stableHash(text) {
+      let hash = 5381;
+      for (let index = 0; index < text.length; index += 1) {
+        hash = ((hash << 5) + hash) ^ text.charCodeAt(index);
+      }
+      return (hash >>> 0).toString(36);
+    }
+
+    function activateVariant(group, value) {
+      const nodes = document.querySelectorAll('.variant[data-group="' + group + '"]');
+      nodes.forEach((el) => {
+        el.classList.toggle('active', el.dataset.value === value);
+      });
+      updateTimelineProgress();
+    }
+
+    function bindControl(name, group) {
+      const radios = document.querySelectorAll('input[name="' + name + '"]');
+      if (!radios.length) return;
+      const storageKey = 'control:' + name;
+      const savedValue = storageGet(storageKey);
+      if (savedValue && Array.from(radios).some((radio) => radio.value === savedValue)) {
+        radios.forEach((radio) => {
+          radio.checked = radio.value === savedValue;
+        });
+      }
+      radios.forEach((radio) => {
+        radio.addEventListener('change', () => {
+          if (radio.checked) {
+            storageSet(storageKey, radio.value);
+            activateVariant(group, radio.value);
+            updateBudgetSummary();
+          }
+        });
+      });
+      const checked = document.querySelector('input[name="' + name + '"]:checked');
+      if (checked) {
+        activateVariant(group, checked.value);
+        updateBudgetSummary();
+      }
+    }
+
+    function bindDetailsPersistence() {
+      document.querySelectorAll('details').forEach((details, index) => {
+        const title = details.querySelector('summary')?.textContent.trim() || 'details';
+        const storageKey = 'details:' + index + ':' + stableHash(title);
+        const savedValue = storageGet(storageKey);
+        if (savedValue !== null) details.open = savedValue === '1';
+        details.addEventListener('toggle', () => {
+          storageSet(storageKey, details.open ? '1' : '0');
+        });
+      });
+    }
+
+    function updateChoiceSelection(group) {
+      group.querySelectorAll('.choice-option').forEach((option) => {
+        const radio = option.querySelector('input[type="radio"]');
+        option.classList.toggle('is-selected', !!radio?.checked);
+      });
+    }
+
+    function bindBudgetChoiceGroups() {
+      document.querySelectorAll('.choice-group[data-budget-choice-group]').forEach((group) => {
+        const radios = group.querySelectorAll('input[type="radio"]');
+        if (!radios.length) return;
+        const name = radios[0].name;
+        const selectedKey = 'choice:' + name;
+        const savedValue = storageGet(selectedKey);
+        if (savedValue && Array.from(radios).some((radio) => radio.value === savedValue)) {
+          radios.forEach((radio) => {
+            radio.checked = radio.value === savedValue;
+          });
+        }
+
+        radios.forEach((radio) => {
+          const option = radio.closest('.choice-option');
+          const actualInput = option?.querySelector('input[data-choice-actual="1"]');
+          const actualKey = 'choice-actual:' + name + ':' + radio.value;
+          if (actualInput) {
+            actualInput.value = storageGet(actualKey) || '';
+            actualInput.addEventListener('input', () => {
+              const value = actualInput.value.trim();
+              if (value) storageSet(actualKey, value);
+              else storageRemove(actualKey);
+              updateBudgetSummary();
+            });
+          }
+          radio.addEventListener('change', () => {
+            if (!radio.checked) return;
+            storageSet(selectedKey, radio.value);
+            updateChoiceSelection(group);
+            updateBudgetSummary();
+          });
+        });
+        updateChoiceSelection(group);
+      });
+    }
+
+    function parseEstimateRange(text) {
+      const values = (text.replace(/,/g, '').match(/\d+(?:\.\d+)?/g) || []).map(Number);
+      if (!values.length) return null;
+      if (values.length >= 2 && /[–-]/.test(text)) return { min: values[0], max: values[1] };
+      return { min: values[0], max: values[0] };
+    }
+
+    function parseActualValue(value) {
+      const match = value.replace(/,/g, '').trim().match(/\d+(?:\.\d+)?/);
+      if (!match) return null;
+      const amount = Number(match[0]);
+      return Number.isFinite(amount) ? amount : null;
+    }
+
+    function formatAmount(amount) {
+      return Math.max(0, Math.round(amount)).toLocaleString('zh-CN') + ' 元';
+    }
+
+    function ensureSessionCostLine(card) {
+      let line = card.querySelector('.session-cost-line');
+      if (line) return line;
+      line = document.createElement('div');
+      line.className = 'session-cost-line';
+      line.textContent = '当前 session 花费：0 元';
+      card.appendChild(line);
+      return line;
+    }
+
+    function isInActiveVariant(input) {
+      const variant = input.closest('.variant');
+      return !variant || variant.classList.contains('active');
+    }
+
+    function shouldTrackBudgetLine(line) {
+      if (!line || !line.closest('.timeline')) return false;
+      const text = line.textContent.replace(/\s+/g, ' ').trim();
+      if (!/元/.test(text)) return false;
+      if (/午餐：2 人约|^预算：2 人约|早餐预算：|晚餐在|价格：晚餐|11:30–13:00：就近午餐/.test(text)) return false;
+      return /机场短接驳|执行预算：约 105|价格：2 人约 100|执行预算：约 75|后半段交通预算|moumoon 下午茶|执行预算：约 155|执行预算：约 45|保留预算缓冲|涉地可支 \/ 城山港后半段|牛岛增量预算|后半段回济州市交通预算|加项预算：济州市轻逛|雨天后半段交通预算|补给预算|机场短车/.test(text);
+    }
+
+    function updateBudgetSummary() {
+      const rangeNode = document.getElementById('currentBudgetRange');
+      const noteNode = document.getElementById('budgetActualNote');
+      if (!rangeNode || !noteNode) return;
+
+      let sessionTotal = 0;
+      let filledCount = 0;
+
+      document.querySelectorAll('.slot .card').forEach((card) => {
+        let cardTotal = 0;
+
+        card.querySelectorAll('input[data-budget-input="1"]').forEach((input) => {
+          if (!isInActiveVariant(input)) return;
+          if (!shouldTrackBudgetLine(input.closest('li'))) return;
+          const actualValue = parseActualValue(input.value);
+          if (actualValue === null) return;
+          filledCount += 1;
+          cardTotal += actualValue;
+        });
+
+        card.querySelectorAll('.choice-group[data-budget-choice-group]').forEach((group) => {
+          if (!isInActiveVariant(group)) return;
+          const selected = group.querySelector('input[type="radio"]:checked');
+          if (!selected) return;
+          const actualInput = selected.closest('.choice-option')?.querySelector('input[data-choice-actual="1"]');
+          const actualValue = parseActualValue(actualInput?.value || '');
+          if (actualValue === null) return;
+          filledCount += 1;
+          cardTotal += actualValue;
+        });
+
+        sessionTotal += cardTotal;
+        ensureSessionCostLine(card).textContent = '当前 session 花费：' + formatAmount(cardTotal);
+      });
+
+      rangeNode.textContent = formatAmount(sessionTotal);
+      noteNode.textContent = filledCount
+        ? '当前共录入 ' + filledCount + ' 个实际金额。'
+        : '当前还没有录入实际金额。';
+      updateTimelineProgress();
+    }
+
+    function createActualPriceControl(key, estimateText, estimate) {
+      const wrapper = document.createElement('span');
+      wrapper.className = 'actual-price-control';
+
+      const label = document.createElement('span');
+      label.textContent = '实际';
+
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.inputMode = 'decimal';
+      input.autocomplete = 'off';
+      input.placeholder = '填写';
+      input.setAttribute('aria-label', '实际价格：' + estimateText);
+      input.dataset.budgetInput = '1';
+      input.dataset.estimateMin = String(estimate.min);
+      input.dataset.estimateMax = String(estimate.max);
+      input.value = storageGet(key) || '';
+      input.addEventListener('input', () => {
+        const value = input.value.trim();
+        if (value) storageSet(key, value);
+        else storageRemove(key);
+        updateBudgetSummary();
+      });
+
+      const unit = document.createElement('span');
+      unit.textContent = '元';
+
+      wrapper.append(label, input, unit);
+      return wrapper;
+    }
+
+    function enhanceActualPriceInputs() {
+      const pricePattern = /(?:约\s*)?(?:\d{1,3}(?:,\d{3})*|\d+)(?:[–-](?:\d{1,3}(?:,\d{3})*|\d+))?\s*元(?:\s*\/\s*(?:车|人|晚))?/g;
+      const targets = document.querySelectorAll('.timeline .detail-list li');
+      targets.forEach((target, targetIndex) => {
+        if (!shouldTrackBudgetLine(target)) return;
+        const baseKey = 'price:' + targetIndex + ':' + stableHash(target.textContent.replace(/\s+/g, ' ').trim());
+        let matchIndex = 0;
+        const walker = document.createTreeWalker(target, NodeFilter.SHOW_TEXT, {
+          acceptNode(node) {
+            if (!pricePattern.test(node.nodeValue)) return NodeFilter.FILTER_REJECT;
+            pricePattern.lastIndex = 0;
+            const parentTag = node.parentElement?.tagName;
+            if (parentTag === 'BUTTON' || parentTag === 'INPUT' || parentTag === 'SCRIPT' || parentTag === 'STYLE') {
+              return NodeFilter.FILTER_REJECT;
+            }
+            return NodeFilter.FILTER_ACCEPT;
+          }
+        });
+        const textNodes = [];
+        while (walker.nextNode()) textNodes.push(walker.currentNode);
+
+        textNodes.forEach((node) => {
+          const fragment = document.createDocumentFragment();
+          let lastIndex = 0;
+          pricePattern.lastIndex = 0;
+          for (const match of node.nodeValue.matchAll(pricePattern)) {
+            const estimateText = match[0];
+            const estimate = parseEstimateRange(estimateText);
+            if (match.index > lastIndex) {
+              fragment.append(document.createTextNode(node.nodeValue.slice(lastIndex, match.index)));
+            }
+            fragment.append(document.createTextNode(estimateText));
+            if (estimate) fragment.append(createActualPriceControl(baseKey + ':' + matchIndex, estimateText, estimate));
+            matchIndex += 1;
+            lastIndex = match.index + estimateText.length;
+          }
+          if (lastIndex < node.nodeValue.length) {
+            fragment.append(document.createTextNode(node.nodeValue.slice(lastIndex)));
+          }
+          node.replaceWith(fragment);
+        });
+      });
+    }
+
+    function parseClockMinutes(text) {
+      const match = text.match(/(\d{1,2}):(\d{2})/);
+      if (!match) return null;
+      const hour = Number(match[1]);
+      const minute = Number(match[2]);
+      if (hour > 23 || minute > 59) return null;
+      return hour * 60 + minute;
+    }
+
+    function parseSlotRange(slot) {
+      const timeText = slot.querySelector('.time')?.textContent || '';
+      const matches = Array.from(timeText.matchAll(/\d{1,2}:\d{2}/g));
+      if (matches.length < 2) return null;
+      const start = parseClockMinutes(matches[0][0]);
+      let end = parseClockMinutes(matches[1][0]);
+      if (start === null || end === null) return null;
+      if (end < start) end += 24 * 60;
+      return { start, end };
+    }
+
+    function localDateMidnight(date) {
+      return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
+    }
+
+    function tripDayIndex(date) {
+      const [year, month, day] = TRIP_START_DATE.split('-').map(Number);
+      const start = new Date(year, month - 1, day);
+      return Math.floor((localDateMidnight(date) - localDateMidnight(start)) / 86400000);
+    }
+
+    function relativeTop(parent, child) {
+      return child.getBoundingClientRect().top - parent.getBoundingClientRect().top;
+    }
+
+    function timelineProgressY(timeline, date) {
+      const days = Array.from(timeline.querySelectorAll('.day'));
+      if (!days.length) return 0;
+
+      const index = tripDayIndex(date);
+      if (index < 0) return 0;
+      if (index >= days.length) return timeline.scrollHeight;
+
+      const activeDay = days[index];
+      const slots = Array.from(activeDay.querySelectorAll('.slot'));
+      const segments = slots.map((slot, slotIndex) => {
+        const range = parseSlotRange(slot);
+        if (!range) return null;
+        const nextSlot = slots[slotIndex + 1];
+        const startY = relativeTop(timeline, slot);
+        const endY = nextSlot ? relativeTop(timeline, nextSlot) : startY + slot.offsetHeight;
+        return { ...range, startY, endY };
+      }).filter(Boolean);
+
+      if (!segments.length) return relativeTop(timeline, activeDay);
+
+      let now = date.getHours() * 60 + date.getMinutes();
+      if (segments.some((segment) => segment.end > 24 * 60) && now < segments[0].start) {
+        now += 24 * 60;
+      }
+
+      if (now < segments[0].start) return relativeTop(timeline, activeDay);
+      for (const segment of segments) {
+        if (now <= segment.end) {
+          const ratio = (now - segment.start) / Math.max(1, segment.end - segment.start);
+          return segment.startY + (segment.endY - segment.startY) * Math.min(1, Math.max(0, ratio));
+        }
+      }
+      return segments[segments.length - 1].endY;
+    }
+
+    function updateTimelineProgress() {
+      const timeline = document.querySelector('.timeline');
+      if (!timeline) return 0;
+      let marker = timeline.querySelector('.timeline-progress-marker');
+      if (!marker) {
+        marker = document.createElement('div');
+        marker.className = 'timeline-progress-marker';
+        marker.setAttribute('aria-hidden', 'true');
+        timeline.prepend(marker);
+      }
+
+      const progressY = Math.min(timeline.scrollHeight, Math.max(0, timelineProgressY(timeline, new Date())));
+      const progressPx = progressY.toFixed(1) + 'px';
+      timeline.style.setProperty('--timeline-progress-height', progressPx);
+      timeline.style.setProperty('--timeline-progress-marker-top', progressPx);
+      return progressY;
+    }
+
+    function scrollToTimelineProgress() {
+      const timeline = document.querySelector('.timeline');
+      if (!timeline) return;
+      const progressY = updateTimelineProgress();
+      const timelineTop = timeline.getBoundingClientRect().top + window.scrollY;
+      const viewportOffset = Math.min(window.innerHeight * 0.38, 260);
+      window.scrollTo({
+        top: Math.max(0, timelineTop + progressY - viewportOffset),
+        behavior: 'smooth'
+      });
+    }
+
+    function bindTimelineProgress() {
+      updateTimelineProgress();
+      const delay = 60000 - (Date.now() % 60000);
+      window.setTimeout(() => {
+        updateTimelineProgress();
+        window.setInterval(updateTimelineProgress, 60000);
+      }, delay);
+      window.addEventListener('resize', updateTimelineProgress);
+    }
+
+    function weatherPointByKey(key) {
+      return WEATHER_POINTS.find((point) => point.key === key) || WEATHER_POINTS[0];
+    }
+
+    function padNumber(value) {
+      return String(value).padStart(2, '0');
+    }
+
+    function tripDateForDay(dayIndex) {
+      const [year, month, day] = TRIP_START_DATE.split('-').map(Number);
+      return new Date(year, month - 1, day + dayIndex);
+    }
+
+    function tripUtcDateForMinute(dayIndex, minuteOfDay) {
+      const [year, month, day] = TRIP_START_DATE.split('-').map(Number);
+      return new Date(Date.UTC(year, month - 1, day + dayIndex, 0, minuteOfDay - 9 * 60));
+    }
+
+    function formatIsoDate(date) {
+      return date.getFullYear() + '-' + padNumber(date.getMonth() + 1) + '-' + padNumber(date.getDate());
+    }
+
+    function tripDateString(dayIndex) {
+      return formatIsoDate(tripDateForDay(dayIndex));
+    }
+
+    function tripEndDateString() {
+      const dayCount = document.querySelectorAll('.timeline .day').length || WEATHER_SLOT_POINTS.length;
+      return tripDateString(Math.max(0, dayCount - 1));
+    }
+
+    function weatherSlotPointKey(dayIndex, slotIndex) {
+      const dayPoints = WEATHER_SLOT_POINTS[dayIndex] || [];
+      return dayPoints[slotIndex] || dayPoints[dayPoints.length - 1] || WEATHER_POINTS[0].key;
+    }
+
+    function ensureTimeWeather(slot) {
+      const time = slot.querySelector('.time');
+      if (!time) return null;
+      let node = time.querySelector('.time-weather');
+      if (node) return node;
+      node = document.createElement('div');
+      node.className = 'time-weather';
+      node.setAttribute('aria-live', 'polite');
+      time.appendChild(node);
+      return node;
+    }
+
+    function setTimeWeatherStatus(text, stateClass) {
+      document.querySelectorAll('.timeline .slot').forEach((slot) => {
+        const node = ensureTimeWeather(slot);
+        if (!node) return;
+        node.className = 'time-weather ' + stateClass;
+        node.textContent = text;
+      });
+    }
+
+    function buildWeatherUrl() {
+      const params = new URLSearchParams({
+        latitude: WEATHER_POINTS.map((point) => point.latitude).join(','),
+        longitude: WEATHER_POINTS.map((point) => point.longitude).join(','),
+        hourly: 'temperature_2m,precipitation_probability,precipitation,weather_code,wind_speed_10m',
+        daily: 'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,precipitation_sum,wind_speed_10m_max',
+        timezone: 'Asia/Seoul',
+        start_date: TRIP_START_DATE,
+        end_date: tripEndDateString()
+      });
+      return WEATHER_ENDPOINT + '?' + params.toString();
+    }
+
+    function buildMetWeatherUrl(point) {
+      const params = new URLSearchParams({
+        lat: point.latitude.toFixed(4),
+        lon: point.longitude.toFixed(4)
+      });
+      return MET_WEATHER_ENDPOINT + '?' + params.toString();
+    }
+
+    function normalizeWeatherResponse(data) {
+      const items = Array.isArray(data) ? data : [data];
+      return WEATHER_POINTS.reduce((result, point, index) => {
+        if (items[index] && !items[index].error) result[point.key] = items[index];
+        return result;
+      }, {});
+    }
+
+    function hourlyIndexFor(locationData) {
+      if (locationData._hourlyIndex) return locationData._hourlyIndex;
+      const index = new Map();
+      (locationData.hourly?.time || []).forEach((time, itemIndex) => {
+        index.set(time, itemIndex);
+      });
+      locationData._hourlyIndex = index;
+      return index;
+    }
+
+    function slotHourKeys(dayIndex, range) {
+      const keys = [];
+      const startHour = Math.floor(range.start / 60);
+      const endHour = Math.floor((Math.max(range.start, range.end) - 1) / 60);
+      for (let hour = startHour; hour <= endHour; hour += 1) {
+        const dayOffset = Math.floor(hour / 24);
+        const normalizedHour = ((hour % 24) + 24) % 24;
+        keys.push(tripDateString(dayIndex + dayOffset) + 'T' + padNumber(normalizedHour) + ':00');
+      }
+      return keys;
+    }
+
+    function maxNumber(values) {
+      const numbers = values.filter((value) => Number.isFinite(value));
+      return numbers.length ? Math.max(...numbers) : null;
+    }
+
+    function sumNumber(values) {
+      const numbers = values.filter((value) => Number.isFinite(value));
+      return numbers.length ? numbers.reduce((total, value) => total + value, 0) : null;
+    }
+
+    function avgNumber(values) {
+      const numbers = values.filter((value) => Number.isFinite(value));
+      return numbers.length ? numbers.reduce((total, value) => total + value, 0) / numbers.length : null;
+    }
+
+    function weatherCodeSeverity(code) {
+      return WEATHER_CODE_SEVERITY[code] ?? 0;
+    }
+
+    function strongestWeatherCode(codes) {
+      const validCodes = codes.filter((code) => Number.isFinite(code));
+      if (!validCodes.length) return null;
+      return validCodes.reduce((selected, code) => {
+        return weatherCodeSeverity(code) > weatherCodeSeverity(selected) ? code : selected;
+      }, validCodes[0]);
+    }
+
+    function dailyWeatherFallback(locationData, dayIndex) {
+      const date = tripDateString(dayIndex);
+      const itemIndex = locationData.daily?.time?.indexOf(date) ?? -1;
+      if (itemIndex < 0) return null;
+      const minTemp = locationData.daily.temperature_2m_min?.[itemIndex];
+      const maxTemp = locationData.daily.temperature_2m_max?.[itemIndex];
+      return {
+        weatherCode: locationData.daily.weather_code?.[itemIndex] ?? null,
+        temperature: Number.isFinite(minTemp) && Number.isFinite(maxTemp) ? (minTemp + maxTemp) / 2 : null,
+        precipitationProbability: locationData.daily.precipitation_probability_max?.[itemIndex] ?? null,
+        precipitation: locationData.daily.precipitation_sum?.[itemIndex] ?? null,
+        windSpeed: locationData.daily.wind_speed_10m_max?.[itemIndex] ?? null
+      };
+    }
+
+    function slotWeather(locationData, dayIndex, range) {
+      const hourly = locationData.hourly;
+      if (!hourly) return dailyWeatherFallback(locationData, dayIndex);
+      const index = hourlyIndexFor(locationData);
+      const itemIndexes = slotHourKeys(dayIndex, range).map((key) => index.get(key)).filter((itemIndex) => itemIndex !== undefined);
+      if (!itemIndexes.length) return dailyWeatherFallback(locationData, dayIndex);
+      return {
+        weatherCode: strongestWeatherCode(itemIndexes.map((itemIndex) => hourly.weather_code?.[itemIndex])),
+        temperature: avgNumber(itemIndexes.map((itemIndex) => hourly.temperature_2m?.[itemIndex])),
+        precipitationProbability: maxNumber(itemIndexes.map((itemIndex) => hourly.precipitation_probability?.[itemIndex])),
+        precipitation: sumNumber(itemIndexes.map((itemIndex) => hourly.precipitation?.[itemIndex])),
+        windSpeed: maxNumber(itemIndexes.map((itemIndex) => hourly.wind_speed_10m?.[itemIndex]))
+      };
+    }
+
+    function formatWeatherNumber(value, digits) {
+      if (!Number.isFinite(value)) return '--';
+      return value.toFixed(digits).replace(/\.0$/, '');
+    }
+
+    function weatherStateClass(forecast) {
+      if (!forecast) return 'is-error';
+      if (isRainyForecast(forecast)) return 'is-rain';
+      if ((forecast.windSpeed ?? 0) >= 25) return 'is-wind';
+      return '';
+    }
+
+    function isRainyForecast(forecast) {
+      return !!forecast && (WEATHER_RAIN_CODES.has(forecast.weatherCode) || (forecast.precipitationProbability ?? 0) >= 50 || (forecast.precipitation ?? 0) >= 1);
+    }
+
+    function metSymbolBase(symbol) {
+      return (symbol || '').replace(/_(day|night|polartwilight)$/, '');
+    }
+
+    function metSymbolSeverity(symbol) {
+      return MET_SYMBOL_SEVERITY[metSymbolBase(symbol)] ?? 0;
+    }
+
+    function metSymbolLabel(symbol) {
+      return MET_SYMBOL_LABELS[metSymbolBase(symbol)] || '天气';
+    }
+
+    function metPeriodData(item) {
+      return item?.data?.next_1_hours || item?.data?.next_6_hours || item?.data?.next_12_hours || null;
+    }
+
+    function isRainyMetForecast(forecast) {
+      return !!forecast && (forecast.precipitation > 0 || /rain|sleet|snow|thunder/.test(forecast.symbol || ''));
+    }
+
+    function metSlotWeather(locationData, dayIndex, range) {
+      const timeseries = locationData?.properties?.timeseries || [];
+      if (!timeseries.length) return null;
+      const start = tripUtcDateForMinute(dayIndex, range.start).getTime();
+      const end = tripUtcDateForMinute(dayIndex, range.end).getTime();
+      const midpoint = start + Math.max(1, end - start) / 2;
+      let items = timeseries.filter((item) => {
+        const itemTime = Date.parse(item.time);
+        return itemTime >= start && itemTime < end;
+      });
+      if (!items.length) {
+        const nearest = timeseries.reduce((selected, item) => {
+          const distance = Math.abs(Date.parse(item.time) - midpoint);
+          return !selected || distance < selected.distance ? { item, distance } : selected;
+        }, null);
+        if (nearest && nearest.distance <= 4 * 3600000) items = [nearest.item];
+      }
+      if (!items.length) return null;
+
+      const temperatures = items.map((item) => item.data?.instant?.details?.air_temperature).filter(Number.isFinite);
+      const winds = items.map((item) => item.data?.instant?.details?.wind_speed).filter(Number.isFinite);
+      const precipitations = items.map((item) => metPeriodData(item)?.details?.precipitation_amount).filter(Number.isFinite);
+      const symbols = items.map((item) => metPeriodData(item)?.summary?.symbol_code).filter(Boolean);
+      const symbol = symbols.reduce((selected, item) => {
+        return metSymbolSeverity(item) > metSymbolSeverity(selected) ? item : selected;
+      }, symbols[0] || 'cloudy');
+
+      return {
+        symbol,
+        label: metSymbolLabel(symbol),
+        temperature: avgNumber(temperatures),
+        precipitation: sumNumber(precipitations) ?? 0,
+        windSpeed: maxNumber(winds.map((value) => value * 3.6))
+      };
+    }
+
+    function weatherCrossCheckText(forecast, metForecast) {
+      if (!metForecast) return 'MET 无校验';
+      const openMeteoRain = isRainyForecast(forecast);
+      const metRain = isRainyMetForecast(metForecast);
+      return 'MET ' + metForecast.label + ' · ' + (openMeteoRain === metRain ? '一致' : '差异');
+    }
+
+    function combinedWeatherStateClass(forecast, metForecast) {
+      if (!forecast) return 'is-error';
+      if (metForecast && isRainyForecast(forecast) !== isRainyMetForecast(metForecast)) return 'is-disagree';
+      return weatherStateClass(forecast);
+    }
+
+    function renderTimeWeather(slot, forecast, point, metForecast) {
+      const node = ensureTimeWeather(slot);
+      if (!node) return;
+      if (!forecast) {
+        node.className = 'time-weather is-error';
+        node.textContent = '无预报';
+        return;
+      }
+
+      const label = WEATHER_CODE_LABELS[forecast.weatherCode] || '天气';
+      const main = document.createElement('span');
+      const meta = document.createElement('span');
+      const source = document.createElement('span');
+      main.className = 'weather-main';
+      meta.className = 'weather-meta';
+      source.className = 'weather-source';
+      main.textContent = label + ' ' + formatWeatherNumber(forecast.temperature, 0) + '°C';
+      meta.textContent = '雨 ' + formatWeatherNumber(forecast.precipitationProbability, 0) + '% / ' + formatWeatherNumber(forecast.precipitation, 1) + 'mm';
+      source.textContent = point.label + ' · ' + weatherCrossCheckText(forecast, metForecast);
+      node.title = 'Open-Meteo · ' + point.label + ' · ' + label + ' · 风 ' + formatWeatherNumber(forecast.windSpeed, 0) + 'km/h' + (metForecast ? '\nMET Norway · ' + metForecast.label + ' · 雨 ' + formatWeatherNumber(metForecast.precipitation, 1) + 'mm · 风 ' + formatWeatherNumber(metForecast.windSpeed, 0) + 'km/h' : '\nMET Norway · 暂无校验');
+      node.className = ('time-weather ' + combinedWeatherStateClass(forecast, metForecast)).trim();
+      node.replaceChildren(main, meta, source);
+    }
+
+    function renderWeatherForecast(weatherData, metWeatherData = {}) {
+      document.querySelectorAll('.timeline .day').forEach((day, dayIndex) => {
+        day.querySelectorAll('.slot').forEach((slot, slotIndex) => {
+          const point = weatherPointByKey(weatherSlotPointKey(dayIndex, slotIndex));
+          const range = parseSlotRange(slot);
+          const forecast = range && weatherData[point.key] ? slotWeather(weatherData[point.key], dayIndex, range) : null;
+          const metForecast = range && metWeatherData[point.key] ? metSlotWeather(metWeatherData[point.key], dayIndex, range) : null;
+          renderTimeWeather(slot, forecast, point, metForecast);
+        });
+      });
+      updateTimelineProgress();
+    }
+
+    let weatherRefreshInFlight = null;
+    let metWeatherCache = null;
+    let metWeatherExpiresAt = 0;
+    let metWeatherRefreshInFlight = null;
+
+    async function refreshMetWeatherForecast() {
+      if (metWeatherCache && Date.now() < metWeatherExpiresAt) return metWeatherCache;
+      if (metWeatherRefreshInFlight) return metWeatherRefreshInFlight;
+      metWeatherRefreshInFlight = (async () => {
+        try {
+          const entries = await Promise.all(WEATHER_POINTS.map(async (point) => {
+            const response = await fetch(buildMetWeatherUrl(point), { cache: 'default' });
+            if (!response.ok) throw new Error('met weather http ' + response.status);
+            const expires = Date.parse(response.headers.get('expires') || '') || Date.now() + MET_WEATHER_FALLBACK_REFRESH_MS;
+            const data = await response.json();
+            return [point.key, data, expires];
+          }));
+          metWeatherCache = entries.reduce((result, [key, data]) => {
+            result[key] = data;
+            return result;
+          }, {});
+          metWeatherExpiresAt = Math.min(...entries.map((entry) => entry[2]));
+          return metWeatherCache;
+        } catch (err) {
+          return metWeatherCache || {};
+        } finally {
+          metWeatherRefreshInFlight = null;
+        }
+      })();
+      return metWeatherRefreshInFlight;
+    }
+
+    async function refreshWeatherForecast() {
+      if (weatherRefreshInFlight) return weatherRefreshInFlight;
+      weatherRefreshInFlight = (async () => {
+        try {
+          const [response, metWeatherData] = await Promise.all([
+            fetch(buildWeatherUrl(), { cache: 'no-store' }),
+            refreshMetWeatherForecast()
+          ]);
+          if (!response.ok) throw new Error('weather http ' + response.status);
+          const data = await response.json();
+          if (data.error) throw new Error(data.reason || 'weather error');
+          renderWeatherForecast(normalizeWeatherResponse(data), metWeatherData);
+        } catch (err) {
+          setTimeWeatherStatus('天气暂不可用', 'is-error');
+        } finally {
+          weatherRefreshInFlight = null;
+        }
+      })();
+      return weatherRefreshInFlight;
+    }
+
+    function bindWeatherForecast() {
+      setTimeWeatherStatus('天气加载中', '');
+      refreshWeatherForecast();
+      window.setInterval(refreshWeatherForecast, WEATHER_REFRESH_MS);
+    }
+
+    renderMealChoiceGroups();
+    normalizeCopyLabels();
+    bindBudgetChoiceGroups();
+    bindControl('day1_weather', 'day1_weather');
+    bindControl('day2_morning_weather', 'day2_morning');
+    bindControl('day2_woljeong_weather', 'day2_woljeong');
+    bindControl('day2_lunch_weather', 'day2_lunch');
+    bindControl('day2_weather', 'day2_weather');
+    bindControl('day3_seongsan_weather', 'day3_seongsan');
+    bindControl('day3_seopjikoji_weather', 'day3_seopjikoji');
+    bindControl('day3_plan', 'day3');
+    bindControl('day4_supply_weather', 'day4_supply');
+    bindDetailsPersistence();
+    enhanceActualPriceInputs();
+    updateBudgetSummary();
+    bindTimelineProgress();
+    bindWeatherForecast();
+
+    const toast = document.getElementById('copyToast');
+    let toastTimer = null;
+
+    function showToast(msg) {
+      if (!toast) return;
+      toast.textContent = msg;
+      toast.classList.add('show');
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 1200);
+    }
+
+    async function copyText(text) {
+      try {
+        await navigator.clipboard.writeText(text);
+        showToast('已复制：' + text);
+      } catch (err) {
+        const area = document.createElement('textarea');
+        area.value = text;
+        document.body.appendChild(area);
+        area.select();
+        document.execCommand('copy');
+        area.remove();
+        showToast('已复制：' + text);
+      }
+    }
+
+    function bindCopyTrigger(trigger) {
+      trigger.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const text = trigger.getAttribute('data-copy') || '';
+        if (!text) return;
+        copyText(text);
+      });
+
+      trigger.addEventListener('keydown', (event) => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        event.preventDefault();
+        trigger.click();
+      });
+    }
+
+    document.querySelectorAll('.ko-copy-chip').forEach(bindCopyTrigger);
+    document.querySelectorAll('.copy-btn').forEach((btn) => {
+      if (!btn.closest('.ko-copy-chip')) bindCopyTrigger(btn);
+    });
+
+    document.getElementById('jumpCurrentTime')?.addEventListener('click', scrollToTimelineProgress);
+  </script>
+</body>
+</html>
